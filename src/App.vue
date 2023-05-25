@@ -1,7 +1,8 @@
 <template>
     <div class="rootContainer">
         <div class="headerContainer">
-            <a-menu mode="horizontal" style="height: 100%;" accordion @menu-item-click="onMenuItemClick">
+            <a-menu mode="horizontal" style="height: 100%;" :selected-keys=currentRoute accordion
+                @menu-item-click="onMenuItemClick">
                 <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled>
                     <div :style="{
                         width: '80px',
@@ -12,7 +13,7 @@
                     }" />
                 </a-menu-item>
                 <a-menu-item key="home">主 页</a-menu-item>
-                <a-menu-item key="library">族 库</a-menu-item>
+                <a-menu-item key="families">族 库</a-menu-item>
                 <a-menu-item key="packages">节 点 包</a-menu-item>
             </a-menu>
             <div class="headerRightContainer">
@@ -30,9 +31,15 @@
 </template>
 
 <script setup lang="ts">
-import { RouterView, useRouter } from 'vue-router';
+import { computed } from 'vue'
+import { RouterView, useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
+const route = useRoute();
+
+const currentRoute = computed<Array<string>>(() => {
+    return new Array<string>(route.name as string);
+})
 
 function onMenuItemClick(key: string) {
     router.push({
