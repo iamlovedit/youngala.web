@@ -76,17 +76,18 @@ function onRegisterClick() {
 }
 
 .headerContainer {
-    height: 60px;
     width: 100%;
+    height: 64px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
+    border-bottom: #f7f8fa 2px solid;
 }
 
 .headerRightContainer {
     height: inherit;
     width: 200px;
-    margin-right: 20px;
+    margin-right: 1em;
     display: flex;
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -94,13 +95,14 @@ function onRegisterClick() {
 }
 
 .contentContainer {
-    width: 100%;
+    width: 80%;
+    margin: 2em auto;
     flex: 1;
     display: flex;
-    background-color: lightblue;
 }
 
 .footContainer {
+    background-color: #f7f8fa;
     height: 40px;
     width: 100%;
     line-height: 40px;

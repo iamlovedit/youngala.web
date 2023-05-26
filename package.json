@@ -9,8 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^20.2.4",
     "@types/three": "^0.152.0",
     "three": "^0.152.2",
+    "tsconfig-paths": "^4.2.0",
     "vue": "^3.2.47",
     "vue-router": "4"
   },

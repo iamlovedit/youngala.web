@@ -1,5 +1,5 @@
 <template>
-    <div class="packagesContainer">
+    <div class="libraryContainer">
         <RouterView />
     </div>
 </template>
@@ -9,9 +9,7 @@ import { RouterView } from 'vue-router';
 </script>
 
 <style scoped>
-.packagesContainer {
+.libraryContainer {
     flex: 1;
-    margin: 40px auto;
-    width: 80%;
 }
 </style>

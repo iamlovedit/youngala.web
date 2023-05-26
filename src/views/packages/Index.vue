@@ -1,11 +1,15 @@
 <template>
-    <div>
-        packages
+    <div class="packagesContainer">
+        <RouterView />
     </div>
 </template>
 
 <script setup lang="ts">
-
+import { RouterView } from 'vue-router';
 </script>
 
-<style scoped></style>
+<style scoped>
+.packagesContainer {
+    flex: 1;
+}
+</style>

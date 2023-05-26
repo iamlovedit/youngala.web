@@ -16,7 +16,7 @@ class DynamoPackage {
     versions!: PackageVersion[];
     votes!: number;
 }
-export {
-    DynamoPackage,
-    PackageVersion
-}
+export type {
+    PackageVersion,
+    DynamoPackage
+};
