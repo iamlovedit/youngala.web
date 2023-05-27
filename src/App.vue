@@ -67,7 +67,7 @@ function onRegisterClick() {
     margin: 0;
     height: 100vh;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: column;
     justify-content: space-between;
     place-items: center;

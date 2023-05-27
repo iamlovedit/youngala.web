@@ -4,14 +4,22 @@
             <a-select :options=orderOptions v-model:model-value="currentOrderOption" />
         </div>
         <div class="listContainer">
-            <a-list :data="pakages">
-                <!-- <template #item="{ packageObj }">
-                    <a-list-item>
-                        <a-list-item-meta :title="packageObj.name">
+            <a-list :max-height="800" scrollbar>
+                <a-list-item v-for="pcakageObj in packages" :key="pcakageObj.id" action-layout="vertical">
+                    <a-list-item-meta :description="pcakageObj.description">
+                    </a-list-item-meta>
+                    <template #meta>
+                        <a-link @click="(event) => onPackageClick(event, pcakageObj)">{{ pcakageObj.name }}</a-link>
+                    </template>
+                    <template #actions>
+                        <icon-edit :title="111">
 
-                        </a-list-item-meta>
-                    </a-list-item>
-                </template> -->
+                        </icon-edit>
+                        <icon-delete>
+
+                        </icon-delete>
+                    </template>
+                </a-list-item>
             </a-list>
         </div>
         <div class="paginationContainer">
@@ -22,6 +30,7 @@
 
 <script setup lang="ts">
 import { onMounted, watch, ref } from 'vue'
+import { useRouter } from "vue-router";
 import { Message } from '@arco-design/web-vue';
 import { DynamoPackage } from "@models/DynamoPackage";
 import { getPackagesPageFetch } from '@/services/packageService';
@@ -62,7 +71,9 @@ const currentOrderOption = ref<OrderOption>()
 const pageIndex = ref<number>(1);
 const pageSize: number = 20;
 const dataCount = ref<number>(0);
-const pakages = ref<DynamoPackage[]>([]);
+const packages = ref<DynamoPackage[]>([]);
+const router = useRouter()
+
 
 function getPackages(keyword?: string, pageIndex: number = 1, pageSize: number = 20, orderField: string = 'downloads'): void {
     const promise = getPackagesPageFetch(keyword, pageIndex, pageSize, orderField)
@@ -70,8 +81,7 @@ function getPackages(keyword?: string, pageIndex: number = 1, pageSize: number =
         if (httpResponse.success) {
             const packagesPage = httpResponse.response
             dataCount.value = packagesPage.dataCount
-            pakages.value = packagesPage.data
-            console.log(pakages.value)
+            packages.value = packagesPage.data
         }
         else {
             Message.error(httpResponse.message)
@@ -79,6 +89,16 @@ function getPackages(keyword?: string, pageIndex: number = 1, pageSize: number =
     }).catch(error => {
         Message.error("网络请求错误!", error.message)
     });
+}
+
+function onPackageClick(event: MouseEvent, pcakageObj: DynamoPackage) {
+    router.push({
+        name: 'packageDetail',
+        params: {
+            id: pcakageObj.id
+        }
+    })
+    event.preventDefault();
 }
 
 
@@ -111,7 +131,11 @@ onMounted(() => {
 .listContainer {
     margin-top: 1em;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
     min-height: 320px;
+
 }
 
 .paginationContainer {

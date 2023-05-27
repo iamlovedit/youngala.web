@@ -29,7 +29,7 @@ const router = createRouter({
                 },
                 {
                     path: ':id',
-                    name: 'detail',
+                    name: 'familyDetail',
                     component: () => import('../views/families/Detail.vue')
                 },
                 {
@@ -50,7 +50,7 @@ const router = createRouter({
                 },
                 {
                     path: ':id',
-                    name: 'detail',
+                    name: 'packageDetail',
                     component: () => import('../views/packages/Detail.vue')
                 },
                 {
