@@ -1,7 +1,7 @@
 <template>
     <div class="rootContainer">
         <div class="headerContainer">
-            <a-menu mode="horizontal" style="height: 100%;" :selected-keys=currentRoute accordion
+            <a-menu mode="horizontal" style="height: 100%;" v-model:selected-keys=currentRoute accordion
                 @menu-item-click="onMenuItemClick">
                 <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled>
                     <div :style="{

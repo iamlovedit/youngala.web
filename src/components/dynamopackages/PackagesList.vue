@@ -1,7 +1,7 @@
 <template>
     <div class="rootContainer">
         <div class="orderOptionContainer">
-            <a-select :options=orderOptions v-model:model-value="currentOrderOption" />
+           
         </div>
         <div class="listContainer">
             <a-list :max-height="800" scrollbar>
@@ -39,35 +39,9 @@ const props = defineProps<{
     keyword?: string
 }>()
 
-interface OrderOption {
-    value: string,
-    label: string
-}
 
-const orderOptions: OrderOption[] = [
-    {
-        value: 'downloads',
-        label: '下载量'
-    },
-    {
-        value: 'name',
-        label: '名称'
-    },
-    {
-        value: 'votes',
-        label: '点赞量'
-    },
-    {
-        value: 'updateTime',
-        label: '更新时间'
-    },
-    {
-        value: 'createTime',
-        label: '创建时间'
-    },
-]
 
-const currentOrderOption = ref<OrderOption>()
+
 const pageIndex = ref<number>(1);
 const pageSize: number = 20;
 const dataCount = ref<number>(0);
