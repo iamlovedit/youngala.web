@@ -1,7 +1,10 @@
 <template>
     <div class="rootContainer">
+        <div class="inputBoxContainer">
+            <a-input-search placeholder="输入节点包名称" v-model="searchInputValue" search-button @search="onSearchClick" />
+        </div>
         <div class="orderOptionContainer">
-           
+            <a-select :options=orderOptions v-model:model-value="currentOrderOption" />
         </div>
         <div class="listContainer">
             <a-list :max-height="800" scrollbar>
@@ -23,7 +26,7 @@
             </a-list>
         </div>
         <div class="paginationContainer">
-            <a-pagination :total="dataCount" v-model:current="pageIndex" :page-size="pageSize" />
+            <a-pagination :total="dataCount" v-model:current="pageIndex" :page-size="pageSize" size="small" />
         </div>
     </div>
 </template>
@@ -33,15 +36,15 @@ import { onMounted, watch, ref } from 'vue'
 import { useRouter } from "vue-router";
 import { Message } from '@arco-design/web-vue';
 import { DynamoPackage } from "@models/DynamoPackage";
-import { getPackagesPageFetch } from '@/services/packageService';
+import { getPackagesPageFetch, orderOptions, OrderOption } from '@/services/packageService';
+const searchInputValue = ref<string | undefined>();
 
 const props = defineProps<{
     keyword?: string
 }>()
 
 
-
-
+const currentOrderOption = ref<OrderOption>()
 const pageIndex = ref<number>(1);
 const pageSize: number = 20;
 const dataCount = ref<number>(0);
@@ -75,12 +78,24 @@ function onPackageClick(event: MouseEvent, pcakageObj: DynamoPackage) {
     event.preventDefault();
 }
 
+function onSearchClick(keyword: string): void {
+    if (searchInputValue.value) {
+        router.push({
+            name: 'search',
+            query: {
+                keyword: keyword
+            }
+        })
+    }
+}
+
 
 watch(pageIndex, (newPageIndex) => {
     getPackages(props.keyword, newPageIndex, pageSize, currentOrderOption.value?.value);
 })
 
 onMounted(() => {
+    console.log(props.keyword)
     getPackages(props.keyword);
 })
 
@@ -89,27 +104,33 @@ onMounted(() => {
 
 <style scoped>
 .rootContainer {
-    margin-top: 1em;
-    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: start;
+}
+
+
+.inputBoxContainer {
+    width: 320px;
+    height: fit-content;
 }
 
 .orderOptionContainer {
+    margin-top: 1em;
     height: fit-content;
     width: 320px;
 }
 
 .listContainer {
     margin-top: 1em;
-    flex: 1;
+    height: 800px;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     min-height: 320px;
-
+    width: 100%;
 }
 
 .paginationContainer {

@@ -5,61 +5,67 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            component: () => import('../views/Home.vue'),
+            component: () => import('@/views/Home.vue'),
             name: 'home'
         },
         {
             path: '/login',
             name: 'login',
-            component: () => import('../views/authorize/Login.vue')
+            component: () => import('@/views/authorize/Login.vue')
         },
         {
             path: '/register',
             name: 'register',
-            component: () => import('../views/authorize/Register.vue')
+            component: () => import('@/views/authorize/Register.vue')
         },
         {
             path: '/families',
-            component: () => import('../views/families/Index.vue'),
+            component: () => import('@/views/families/Index.vue'),
             children: [
                 {
                     path: '',
                     name: 'families',
-                    component: () => import('../views/families/Browser.vue')
+                    component: () => import('@/views/families/Browser.vue')
                 },
                 {
                     path: ':id',
                     name: 'familyDetail',
-                    component: () => import('../views/families/Detail.vue')
+                    component: () => import('@/views/families/Detail.vue')
                 },
                 {
                     path: 'search',
                     name: 'search',
-                    component: () => import('../views/families/Search.vue')
+                    component: () => import('@/views/families/Search.vue')
                 }
             ]
         },
         {
             path: '/packages',
-            component: () => import('../views/packages/Index.vue'),
+            component: () => import('@/views/packages/Index.vue'),
             children: [
                 {
                     path: '',
                     name: 'packages',
-                    component: () => import('../views/packages/Browser.vue')
+                    component: () => import('@/views/packages/Browser.vue')
                 },
                 {
                     path: ':id',
                     name: 'packageDetail',
-                    component: () => import('../views/packages/Detail.vue')
+                    component: () => import('@/views/packages/Detail.vue'),
+
                 },
                 {
                     path: 'search',
                     name: 'search',
-                    component: () => import('../views/packages/Search.vue')
+                    component: () => import('@/views/packages/Search.vue')
                 }
             ]
         },
+        {
+            path: '/404',
+            name: '404',
+            component: () => import('@/views/errors/404.vue')
+        }
     ]
 })
 

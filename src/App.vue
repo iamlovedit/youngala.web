@@ -12,9 +12,9 @@
                         cursor: 'text',
                     }" />
                 </a-menu-item>
-                <a-menu-item key="home">主 页</a-menu-item>
-                <a-menu-item key="families">族 库</a-menu-item>
-                <a-menu-item key="packages">节 点 包</a-menu-item>
+                <a-menu-item key="/">主 页</a-menu-item>
+                <a-menu-item key="/families">族 库</a-menu-item>
+                <a-menu-item key="/packages">节 点 包</a-menu-item>
             </a-menu>
             <div class="headerRightContainer">
                 <a-button type="text" @click="onLoginClick">登 录</a-button>
@@ -31,19 +31,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { watch, ref } from 'vue'
 import { RouterView, useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
-
-const currentRoute = computed<Array<string>>(() => {
-    return new Array<string>(route.name as string);
-})
+const currentRoute = ref<Array<string>>([]);
 
 function onMenuItemClick(key: string) {
     router.push({
-        name: key
+        path: key
     })
 }
 
@@ -58,6 +55,10 @@ function onRegisterClick() {
         name: 'register'
     })
 }
+
+watch(route, () => {
+    currentRoute.value = new Array<string>(route.matched[0].path);
+})
 
 </script>
 
