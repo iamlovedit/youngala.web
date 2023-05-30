@@ -1,6 +1,58 @@
 <template>
-    <RouterView />
+    <div class="packageContainer">
+        <div class="inputBoxContainer">
+            <a-input-search placeholder="输入节点包名称" v-model="searchInputValue" search-button @search="onSearchClick"
+                allow-clear @clear="onClear" />
+        </div>
+        <div class="routerViewContainer">
+            <RouterView />
+        </div>
+    </div>
 </template>
 <script setup lang="ts">
-import { RouterView } from "vue-router";
+import { ref } from "vue";
+import { RouterView, useRouter, useRoute } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
+const searchInputValue = ref<string | undefined>(route.query['keyword'] as string);
+
+
+
+function onSearchClick(keyword: string): void {
+    if (searchInputValue.value) {
+        router.push({
+            name: 'search',
+            query: {
+                keyword: keyword,
+            }
+        })
+    }
+}
+
+function onClear(): void {
+    searchInputValue.value = undefined
+    router.push({
+        name: 'packages',
+    })
+}
 </script>
+<style scoped>
+.packageContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.inputBoxContainer {
+    width: 320px;
+    height: fit-content;
+}
+
+.routerViewContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+</style>

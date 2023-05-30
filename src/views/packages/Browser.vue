@@ -1,5 +1,5 @@
 <template>
-    <PackagesList />
+    <PackagesList :keyword="undefined" />
 </template>
 
 <script setup lang="ts">
