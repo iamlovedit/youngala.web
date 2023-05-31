@@ -32,16 +32,20 @@ function onSearchClick(keyword: string): void {
 
 function onClear(): void {
     searchInputValue.value = undefined
-    router.push({
-        name: 'packages',
-    })
+    if (route.name === 'search') {
+        router.push({
+            name: 'packages',
+        })
+    }
 }
+
 </script>
 <style scoped>
 .packageContainer {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    width: 100%;
 }
 
 .inputBoxContainer {
@@ -54,5 +58,6 @@ function onClear(): void {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    width: 100%;
 }
 </style>

@@ -52,10 +52,6 @@ const router = createRouter({
                     path: ':id',
                     name: 'packageDetail',
                     component: () => import('@/views/packages/Detail.vue'),
-                    props: {
-                        name: String,
-                        description: String
-                    }
                 },
                 {
                     path: 'search',

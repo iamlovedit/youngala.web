@@ -12,7 +12,7 @@
                         <a-link @click="(event) => onPackageClick(event, pcakageObj)">{{ pcakageObj.name }}</a-link>
                     </template>
                     <template #actions>
-                        <icon-edit :title="111">
+                        <icon-edit>
 
                         </icon-edit>
                         <icon-delete>
@@ -95,7 +95,8 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-items: flex-start;
+    width: 100%;
+    height: 100%;
 }
 
 .orderOptionContainer {
@@ -117,6 +118,6 @@ onMounted(() => {
 .paginationContainer {
     margin-top: 1em;
     height: 28px;
-    width: 320px;
+    width: 100%;
 }
 </style>

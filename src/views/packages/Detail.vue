@@ -1,7 +1,7 @@
 <template>
     <div class="detailContainer">
         <div class="headContainer">
-            <a-page-header :style="{ background: 'var(--color-bg-2)' }" title="返回" subtitle="ArcoDesign Vue 2.0" />
+            <a-page-header :style="{ background: 'var(--color-bg-2)' }" title="返回" subtitle="111" @back="onBack" />
         </div>
         <div class="descriptionContainer">
 
@@ -15,19 +15,17 @@
 
 <script setup lang="ts">
 
-const props=defineProps<{
-    name:string,
-    descrption:string
-}>()
 
 import { onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
+const router = useRouter();
 
-
+function onBack(): void {
+    router.back()
+}
 
 onMounted(() => {
-
 })
 
 </script>
