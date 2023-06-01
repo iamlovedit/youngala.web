@@ -1,4 +1,4 @@
-import { HttpRequest } from "./fetch";
+import { HttpRequest } from "@/services/fetch";
 import { PageData } from '@models/PageData';
 import type { DynamoPackage, PackageVersion } from "@models/DynamoPackage";
 import type { HttpResponse } from '@models/HttpResponse';
