@@ -1,6 +1,6 @@
 <template>
     <div class="mainContianer" v-tooltip="{ content: props.title }">
-        <icon-font :type="props.type" :size=size />
+        <icon-font :type="props.type" :size=props.size />
         <div class="statusContainer">
             <p>
                 {{ props.title }}
@@ -15,14 +15,17 @@ import { src } from "@assets/iconfont"
 
 
 interface Props {
-    title: string | number,
-    size?: number,
-    type: string
+    title: string | number | undefined,
+    size: number | undefined,
+    type: string | undefined
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    title: undefined,
+    size: 16,
+    type: undefined
+})
 const IconFont = Icon.addFromIconFontCn({ src: src });
-const size = props.size || 16
 </script>
 
 <style scoped>

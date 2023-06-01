@@ -34,7 +34,7 @@ const router = createRouter({
                 },
                 {
                     path: 'search',
-                    name: 'search',
+                    name: 'familySearch',
                     component: () => import('@/views/families/Search.vue')
                 }
             ]
