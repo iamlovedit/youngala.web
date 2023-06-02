@@ -2,11 +2,8 @@ import { HttpRequest } from "@/services/fetch";
 import { PageData } from '@models/PageData';
 import type { DynamoPackage, PackageVersion } from "@models/DynamoPackage";
 import type { HttpResponse } from '@models/HttpResponse';
+import { OrderOption } from "@models/OrderOption";
 
-interface OrderOption {
-    value: string,
-    label: string
-}
 const orderOptions: OrderOption[] = [
     {
         value: 'downloads',
