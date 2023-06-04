@@ -96,8 +96,7 @@ watch(route, () => {
 }
 
 .contentContainer {
-    width: 80%;
-    margin: 2em auto;
+    width: 100%;
     flex: 1;
     display: flex;
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="registerContainer">
 
     </div>
 </template>
@@ -8,4 +8,8 @@
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.registerContainer {
+    width: 100%;
+}
+</style>

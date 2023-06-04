@@ -178,7 +178,8 @@ onMounted(() => {
 
 <style scoped>
 .libraryContainer {
-    width: 100%;
+    width: 70%;
+    margin: 2em auto;
     display: flex;
     flex-wrap: nowrap;
     gap: 1em;

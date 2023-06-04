@@ -45,7 +45,8 @@ function onClear(): void {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    width: 100%;
+    width: 70%;
+    margin: 2em auto;
 }
 
 .inputBoxContainer {
