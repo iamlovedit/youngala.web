@@ -20,7 +20,7 @@
                 </a-button>
             </div>
             <div class="orderContainer">
-                <a-radio-group type="button" :default-value="checkedOrder">
+                <a-radio-group type="button" v-model:model-value=checkedOrder @change="onOrderChange">
                     <a-grid :cols="4" :colGap="16">
                         <a-grid-item>
                             <a-radio value="name">综合排序</a-radio>
@@ -29,10 +29,10 @@
                             <a-radio value="download">最多下载</a-radio>
                         </a-grid-item>
                         <a-grid-item>
-                            <a-radio value="3">最多浏览</a-radio>
+                            <a-radio value="views">最多浏览</a-radio>
                         </a-grid-item>
                         <a-grid-item>
-                            <a-radio value="star">最多收藏</a-radio>
+                            <a-radio value="stars">最多收藏</a-radio>
                         </a-grid-item>
                     </a-grid>
                 </a-radio-group>
@@ -72,7 +72,6 @@ const keywordColor: string = "#0fc6c2";
 const hasFilters = ref<boolean>();
 const tree = ref<InstanceType<typeof Tree> | null>(null)
 const checkedOrder = ref<string>('name')
-
 
 if (route.name !== 'families') {
     const categoryId = route.query['categoryId']?.toLocaleString();
@@ -133,6 +132,16 @@ function onClearButtonClick() {
     pushToFamilyHome();
 }
 
+function onOrderChange(value: string | number | boolean) {
+    if (route.name === "families") {
+
+    }
+    else {
+
+    }
+}
+
+
 function createTag(title: string, filterType: FilterType): FilterTag {
     const color = filterType == FilterType.Keyword ? keywordColor : categoryColor;
     return new FilterTag(title, filterType, color);
@@ -187,6 +196,7 @@ function pushToSearch(categoryId?: number, keyword?: string): void {
             name: 'familySearch',
             query: {
                 categoryId: categoryId,
+
             }
         })
     }
@@ -214,7 +224,6 @@ watch(tags, () => {
 })
 
 onMounted(() => {
-
     getFamilyCategories();
 })
 

@@ -19,8 +19,19 @@ import { useRouter, useRoute } from "vue-router";
 import { Message } from '@arco-design/web-vue';
 import { Family } from "@models/Family";
 
+interface props {
+    categoryId: number | undefined,
+    keyword: string | undefined,
+    order: string | undefined
+}
 
+const props = withDefaults(defineProps<props>(), {
+    categoryId: undefined,
+    keyword: undefined,
+    order: undefined
+});
 
+console.log(props)
 const router = useRouter();
 const route = useRoute();
 const pageIndex = ref<number>(1);
