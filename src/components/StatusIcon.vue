@@ -1,12 +1,14 @@
 <template>
-    <div class="mainContianer" v-tooltip="{ content: props.title }">
-        <icon-font :type="props.type" :size=props.size />
-        <div class="statusContainer">
-            <p>
-                {{ props.title }}
-            </p>
+    <a-tooltip :content="props.tooltip">
+        <div class="mainContianer">
+            <icon-font :type="props.type" :size=props.size />
+            <div class="statusContainer">
+                <p>
+                    {{ props.title }}
+                </p>
+            </div>
         </div>
-    </div>
+    </a-tooltip>
 </template>
 
 <script setup lang="ts">
@@ -18,12 +20,14 @@ interface Props {
     title: string | number | undefined,
     size: number | undefined,
     type: string | undefined
+    tooltip: string | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
     title: undefined,
     size: 16,
-    type: undefined
+    type: undefined,
+    tooltip: undefined
 })
 const IconFont = Icon.addFromIconFontCn({ src: src });
 </script>
@@ -33,6 +37,7 @@ const IconFont = Icon.addFromIconFontCn({ src: src });
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: flex-start;
     gap: 5px;
 }
 

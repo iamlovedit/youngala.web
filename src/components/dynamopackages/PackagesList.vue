@@ -15,10 +15,10 @@
                                 {{ pcakageObj.description }}
                             </div>
                             <div class="statusContainer">
-                                <StatusIcon :title="pcakageObj.createTime" :type=releaseIcon />
-                                <StatusIcon :title="pcakageObj.updateTime" :type=updateIcon />
-                                <StatusIcon :title="pcakageObj.votes" :type=likeIcon />
-                                <StatusIcon :title="pcakageObj.downloads" :type=downloadIcon />
+                                <StatusIcon :title="pcakageObj.createTime" :type=releaseIcon tooltip="发布时间" />
+                                <StatusIcon :title="pcakageObj.updateTime" :type=updateIcon tooltip="更新时间" />
+                                <StatusIcon :title="pcakageObj.votes" :type=likeIcon tooltip="点赞量" />
+                                <StatusIcon :title="pcakageObj.downloads" :type=downloadIcon tooltip="下载量" />
                             </div>
                         </div>
                     </template>
