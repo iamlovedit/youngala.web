@@ -1,9 +1,9 @@
 <template>
     <div class="errorContainer">
-        <a-result status="404" subtitle="您访问的页面不存在">
+        <a-result status="403" subtitle="对不起，您无权访问该页面">
             <template #extra>
                 <a-space>
-                    <a-button type="primary" @click=onBackClick>返回</a-button>
+                    <a-button type="primary" @click="onBackClick">返回</a-button>
                 </a-space>
             </template>
         </a-result>
@@ -12,11 +12,10 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-
 const router = useRouter();
 
-function onBackClick() {
-    router.back()
+function onBackClick(): void {
+    router.back();
 }
 </script>
 

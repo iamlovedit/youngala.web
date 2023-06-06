@@ -9,6 +9,10 @@ const router = createRouter({
             name: 'home'
         },
         {
+            path: '/home',
+            redirect: '/'
+        },
+        {
             path: '/login',
             name: 'login',
             component: () => import('@/views/authorize/Login.vue')
@@ -28,7 +32,7 @@ const router = createRouter({
                     component: () => import('@/views/families/Browser.vue')
                 },
                 {
-                    path: ':id',
+                    path: ':id(\\d+)',
                     name: 'familyDetail',
                     component: () => import('@/views/families/Detail.vue')
                 },
@@ -61,9 +65,14 @@ const router = createRouter({
             ]
         },
         {
-            path: '/404',
+            path: '/:catch(.*)',
             name: '404',
             component: () => import('@/views/errors/404.vue')
+        },
+        {
+            path: '/403',
+            name: '403',
+            component: () => import('@/views/errors/403.vue')
         }
     ]
 })

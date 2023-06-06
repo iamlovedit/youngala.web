@@ -3,7 +3,7 @@
         <div class="listContainer">
             <a-list :data="families">
                 <template #Item>
-
+                    
                 </template>
             </a-list>
         </div>
@@ -31,7 +31,6 @@ const props = withDefaults(defineProps<props>(), {
     order: undefined
 });
 
-console.log(props)
 const router = useRouter();
 const route = useRoute();
 const pageIndex = ref<number>(1);
@@ -41,6 +40,10 @@ const families = ref<Family[]>()
 
 onMounted(() => {
 
+})
+
+watch(props, () => {
+    console.log(props)
 })
 </script>
 

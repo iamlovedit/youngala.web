@@ -88,6 +88,12 @@ if (route.name !== 'families') {
     hasFilters.value = tags.value.length > 0
 }
 
+/**
+ * Handles the event of selecting a category.
+ * @param {(string | number)[]} keys - An array of keys.
+ * @param {any} data - Data associated with the event.
+ * @return {void} Does not return anything.
+ */
 function OnCategorySelect(keys: (string | number)[], data: any): void {
     const selectedCategory: FamilyCategory = data.selectedNodes[0];
     const categoryTag: FilterTag = createTag(selectedCategory.name, FilterType.Category);
@@ -109,6 +115,14 @@ function OnCategorySelect(keys: (string | number)[], data: any): void {
     }
 }
 
+/**
+ * Handles the click event of the search button. If the input value is not empty, it creates a
+ * keyword filter tag and either pushes it to the tags array and performs a search on the families
+ * route or creates a category filter tag and pushes both tags to the tags array and performs a
+ * search on the search route.
+ * @param {string} inputValue - The value of the search input.
+ * @return {void} This function does not return anything.
+ */
 function onSearchClick(inputValue: string): void {
     if (inputValue) {
         tags.value = []
@@ -119,7 +133,7 @@ function onSearchClick(inputValue: string): void {
         }
         else {
             //in search route
-            const selectedCategory = tree.value?.getSelectedNodes()[0] as FamilyCategory
+            const selectedCategory = tree.value?.getSelectedNodes()[0] as FamilyCategory  //TODO: 刷新后设置tree的选择点
             const categoryTag: FilterTag = createTag(selectedCategory.name, FilterType.Category);
             tags.value.push(categoryTag, keywordTag);
             pushToSearch(selectedCategory.id, inputValue)
@@ -127,10 +141,16 @@ function onSearchClick(inputValue: string): void {
     }
 }
 
+/**
+ * Clears the tags, pushes the current view to the family home, and clears the selected tree node.
+ * @return {void} This function does not return anything.
+ */
 function onClearButtonClick() {
     tags.value = []
     pushToFamilyHome();
+    clearTreeSelected();
 }
+
 
 function onOrderChange(value: string | number | boolean) {
     if (route.name === "families") {
@@ -147,7 +167,12 @@ function createTag(title: string, filterType: FilterType): FilterTag {
     return new FilterTag(title, filterType, color);
 }
 
-function onCloseTag(tag: FilterTag) {
+/**
+ * Removes the given tag from the list of tags and updates the search query.
+ * @param {FilterTag} tag - The tag to be removed.
+ * @return {void} This function does not return anything.
+ */
+function onCloseTag(tag: FilterTag): void {
     tags.value = tags.value.filter(t => t.value !== tag.value);
     if (tags.value.length > 0) {
         const filterTag = tags.value[0]
@@ -165,7 +190,12 @@ function onCloseTag(tag: FilterTag) {
     }
 }
 
-function getFamilyCategories() {
+/**
+ * Retrieves the family categories using a promise and updates the categories value in the response.
+ *
+ * @return {Promise} A promise that resolves with the categories or rejects with an error message.
+ */
+function getFamilyCategories(): void {
     let promise = getFamilyCategoriesFetch();
     promise.then(response => {
         if (response.success) {
@@ -179,7 +209,7 @@ function getFamilyCategories() {
     })
 }
 
-function clearTreeSelected() {
+function clearTreeSelected(): void {
     selectedKeys.value = []
 }
 
@@ -190,6 +220,12 @@ function pushToFamilyHome(): void {
     })
 }
 
+/**
+ * This function pushes a search to the router based on categoryId and/or keyword.
+ * @param {number} [categoryId] - The id of the category to search for.
+ * @param {string} [keyword] - The keyword to search for.
+ * @return {void} This function does not return anything.
+ */
 function pushToSearch(categoryId?: number, keyword?: string): void {
     if (categoryId != undefined && keyword == undefined) {
         router.push({
@@ -219,6 +255,7 @@ function pushToSearch(categoryId?: number, keyword?: string): void {
     }
 }
 
+
 watch(tags, () => {
     hasFilters.value = tags.value.length > 0;
 })
@@ -226,6 +263,9 @@ watch(tags, () => {
 onMounted(() => {
     getFamilyCategories();
 })
+
+watch(() => route.query, () => {
+}, { deep: true, immediate: true })
 
 </script>
 
