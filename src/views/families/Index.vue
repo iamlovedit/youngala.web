@@ -29,7 +29,7 @@
                             <a-radio value="download">最多下载</a-radio>
                         </a-grid-item>
                         <a-grid-item>
-                            <a-radio value="views">最多浏览</a-radio>
+                            <a-radio value="latest">最新发布</a-radio>
                         </a-grid-item>
                         <a-grid-item>
                             <a-radio value="stars">最多收藏</a-radio>
@@ -129,14 +129,14 @@ function onSearchClick(inputValue: string): void {
         const keywordTag: FilterTag = createTag(inputValue, FilterType.Keyword);
         if (route.name === 'families') {
             tags.value.push(keywordTag);
-            pushToSearch(undefined, inputValue)
+            pushToSearch(undefined, inputValue, checkedOrder.value)
         }
         else {
             //in search route
             const selectedCategory = tree.value?.getSelectedNodes()[0] as FamilyCategory  //TODO: 刷新后设置tree的选择点
             const categoryTag: FilterTag = createTag(selectedCategory.name, FilterType.Category);
             tags.value.push(categoryTag, keywordTag);
-            pushToSearch(selectedCategory.id, inputValue)
+            pushToSearch(selectedCategory.id, inputValue, checkedOrder.value)
         }
     }
 }
@@ -145,7 +145,7 @@ function onSearchClick(inputValue: string): void {
  * Clears the tags, pushes the current view to the family home, and clears the selected tree node.
  * @return {void} This function does not return anything.
  */
-function onClearButtonClick() {
+function onClearButtonClick(): void {
     tags.value = []
     pushToFamilyHome();
     clearTreeSelected();
@@ -154,10 +154,18 @@ function onClearButtonClick() {
 
 function onOrderChange(value: string | number | boolean) {
     if (route.name === "families") {
-
+        // pushToSearch(undefined, undefined, value as string)
+        router.push({
+            name: 'families',
+            query: {
+                sort: value as string
+            }
+        })
     }
     else {
-
+        const categoryId = route.query['categoryId']?.toLocaleString();
+        const Keyword = route.query['keyword']?.toLocaleString();
+        pushToSearch(categoryId, Keyword, value as string)
     }
 }
 
@@ -178,7 +186,7 @@ function onCloseTag(tag: FilterTag): void {
         const filterTag = tags.value[0]
         if (tag.Type === FilterType.Keyword) {
             const selectedCategory = tree.value?.getSelectedNodes()[0] as FamilyCategory
-            pushToSearch(selectedCategory.id, undefined)
+            pushToSearch(selectedCategory.id, undefined,)
         }
         else {
             clearTreeSelected();
@@ -220,39 +228,17 @@ function pushToFamilyHome(): void {
     })
 }
 
-/**
- * This function pushes a search to the router based on categoryId and/or keyword.
- * @param {number} [categoryId] - The id of the category to search for.
- * @param {string} [keyword] - The keyword to search for.
- * @return {void} This function does not return anything.
- */
-function pushToSearch(categoryId?: number, keyword?: string): void {
-    if (categoryId != undefined && keyword == undefined) {
-        router.push({
-            name: 'familySearch',
-            query: {
-                categoryId: categoryId,
 
-            }
-        })
-    }
-    else if (keyword != undefined && categoryId == undefined) {
-        router.push({
-            name: 'familySearch',
-            query: {
-                keyword: keyword
-            }
-        })
-    }
-    else {
-        router.push({
-            name: 'familySearch',
-            query: {
-                categoryId: categoryId,
-                keyword: keyword
-            }
-        })
-    }
+function pushToSearch(categoryId?: number | string, keyword?: string, sort: string = 'name'): void {
+
+    router.push({
+        name: 'familySearch',
+        query: {
+            categoryId: categoryId,
+            keyword: keyword,
+            sort: sort
+        }
+    })
 }
 
 

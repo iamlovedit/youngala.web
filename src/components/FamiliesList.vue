@@ -1,9 +1,13 @@
 <template>
     <div class="familiesContainer">
         <div class="listContainer">
-            <a-list :data="families">
-                <template #Item>
-                    
+            <a-list :data="families" :grid-props="{ gutter: [20, 20], sm: 24, md: 12, lg: 8, xl: 6 }">
+                <template #Item="{ family }">
+                    <a-list-item>
+                        <a-card>
+                            {{ family.name }}
+                        </a-card>
+                    </a-list-item>
                 </template>
             </a-list>
         </div>
@@ -18,6 +22,8 @@ import { onMounted, watch, ref } from 'vue'
 import { useRouter, useRoute } from "vue-router";
 import { Message } from '@arco-design/web-vue';
 import { Family } from "@models/Family";
+import { getFamilyPageByCategoryFetch, getFamilyPageByKeywordFetch, getFamilyPageFetech } from "@/services/familyService";
+
 
 interface props {
     categoryId: number | undefined,
@@ -28,7 +34,7 @@ interface props {
 const props = withDefaults(defineProps<props>(), {
     categoryId: undefined,
     keyword: undefined,
-    order: undefined
+    order: 'name'
 });
 
 const router = useRouter();
@@ -38,8 +44,24 @@ const pageSize = 20;
 const dataCount = ref<number>(0);
 const families = ref<Family[]>()
 
-onMounted(() => {
+function getAllFamilyPage(pageIndex: number, sort: string): void {
+    const promise = getFamilyPageFetech(pageIndex, pageSize, sort);
+    promise.then(response => {
+        if (response.success) {
+            const familiesPage = response.response;
+            families.value = familiesPage.data
+            dataCount.value = familiesPage.dataCount
+        }
+        else {
+            Message.error(response.message)
+        }
+    }).catch(error => {
+        Message.error("网络请求错误:", error.message)
+    })
+}
 
+onMounted(() => {
+    getAllFamilyPage(pageIndex.value, props.order as string);
 })
 
 watch(props, () => {

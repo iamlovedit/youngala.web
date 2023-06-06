@@ -9,37 +9,41 @@ function getFamilyCategoriesFetch(): Promise<HttpResponse<FamilyCategory[]>> {
     const promise = httpRequest.getAsync<HttpResponse<FamilyCategory[]>>('/v1/categories');
     return promise;
 }
-function getFamilyPageByCategoryFetch(categoryId: number, pageIndex: number, pageSize: number): Promise<HttpResponse<PageData<Family>>> {
+function getFamilyPageByCategoryFetch(categoryId: number, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
     const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>("/v1/category", {
         categoryId,
         pageIndex,
-        pageSize
+        pageSize,
+        orderField: sort
     })
     return promise;
 }
-function getFamilyPageByKeywordFetch(keyword: string, pageIndex: number, pageSize: number): Promise<HttpResponse<PageData<Family>>> {
+function getFamilyPageByKeywordFetch(keyword: string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
     const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>('/v1/keyword', {
         keyword,
         pageIndex,
-        pageSize
+        pageSize,
+        orderField: sort
     })
     return promise;
 }
 
-function getFamilyPageFetech(pageIndex: number, pageSize: number): Promise<HttpResponse<PageData<Family>>> {
+function getFamilyPageFetech(pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
     const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>('/v1/all', {
         pageIndex,
-        pageSize
+        pageSize,
+        orderField: sort
     })
     return promise;
 }
 
-function filterFamiliePageFetch(categoryId: number, keyword: string, pageIndex: number, pageSize: number): Promise<HttpResponse<PageData<Family>>> {
+function filterFamiliePageFetch(categoryId: number, keyword: string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
     const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>('/v1', {
         categoryId,
         keyword,
         pageIndex,
-        pageSize
+        pageSize,
+        orderField: sort
     })
     return promise
 

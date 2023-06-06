@@ -13,6 +13,11 @@ const router = createRouter({
             redirect: '/'
         },
         {
+            path: '/admin',
+            name: 'admin',
+            component: () => import('@/views/administrator/Index.vue')
+        },
+        {
             path: '/login',
             name: 'login',
             component: () => import('@/views/authorize/Login.vue')
