@@ -117,7 +117,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    min-height: 320px;
+   
     width: 100%;
 }
 

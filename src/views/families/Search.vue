@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 import { ref, watch } from "vue";
-import FamiliesList from "@components/FamiliesList.vue";
+import FamiliesList from "@components/family/FamiliesList.vue";
 
 const route = useRoute();
 

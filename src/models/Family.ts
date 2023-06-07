@@ -10,7 +10,9 @@ interface Family {
     id: string;
     name: string;
     createTime: string;
-    category: FamilyCategory
+    category: FamilyCategory,
+    stars: number;
+    imageUrl: string
 }
 
 export type {

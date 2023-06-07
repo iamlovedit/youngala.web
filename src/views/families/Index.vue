@@ -6,10 +6,10 @@
         </div>
         <div class=" familyContainer">
             <div class="searchContainer">
-                <a-input-search placeholder="Search" v-model:model-value="searchValue" search-button @search="onSearchClick"
+                <a-input-search placeholder="搜索族" v-model:model-value="searchValue" search-button @search="onSearchClick"
                     allow-clear />
             </div>
-            <div class="filtersContainer" v-if="hasFilters">
+            <div class="filtersContainer" v-show="tags.length">
                 <div class="tagsContainer">
                     <a-tag v-for="tag in tags" :key="tag.value" :color="tag.color" closable @close="() => onCloseTag(tag)">
                         {{ tag.value }}
@@ -69,7 +69,7 @@ const expandedKeys = ref<(string | number)[]>([]);
 const tags = ref<FilterTag[]>([]);
 const categoryColor: string = "#168cff";
 const keywordColor: string = "#0fc6c2";
-const hasFilters = ref<boolean>();
+
 const tree = ref<InstanceType<typeof Tree> | null>(null)
 const checkedOrder = ref<string>('name')
 
@@ -85,7 +85,6 @@ if (route.name !== 'families') {
         searchValue.value = keyword
         tags.value.push(createTag(keyword, FilterType.Keyword));
     }
-    hasFilters.value = tags.value.length > 0
 }
 
 /**
@@ -146,11 +145,14 @@ function onSearchClick(inputValue: string): void {
  * @return {void} This function does not return anything.
  */
 function onClearButtonClick(): void {
-    tags.value = []
+    clearFilterTags();
     pushToFamilyHome();
     clearTreeSelected();
 }
 
+function clearFilterTags(): void {
+    tags.value = []
+}
 
 function onOrderChange(value: string | number | boolean) {
     if (route.name === "families") {
@@ -230,7 +232,6 @@ function pushToFamilyHome(): void {
 
 
 function pushToSearch(categoryId?: number | string, keyword?: string, sort: string = 'name'): void {
-
     router.push({
         name: 'familySearch',
         query: {
@@ -241,23 +242,23 @@ function pushToSearch(categoryId?: number | string, keyword?: string, sort: stri
     })
 }
 
-
-watch(tags, () => {
-    hasFilters.value = tags.value.length > 0;
+watch(route, () => {
+    if (route.name === 'families') {
+        clearTreeSelected();
+        clearFilterTags();
+        searchValue.value = undefined
+    }
 })
 
 onMounted(() => {
     getFamilyCategories();
 })
 
-watch(() => route.query, () => {
-}, { deep: true, immediate: true })
-
 </script>
 
 <style scoped>
 .libraryContainer {
-    width: 70%;
+    width: 60%;
     margin: 2em auto;
     display: flex;
     flex-wrap: nowrap;
@@ -266,6 +267,8 @@ watch(() => route.query, () => {
 
 .categoryContainer {
     width: 280px;
+    border: 1px solid lightgrey;
+    padding: 1em;
 }
 
 .familyContainer {
@@ -277,11 +280,12 @@ watch(() => route.query, () => {
 }
 
 .searchContainer {
-    width: 320px;
+    width: 100%;
+    margin: 0;
 }
 
 .filtersContainer {
-    width: 320px;
+    width: 100%;
     display: flex;
     flex-wrap: nowrap;
     align-items: center;

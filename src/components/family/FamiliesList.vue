@@ -1,15 +1,8 @@
 <template>
     <div class="familiesContainer">
         <div class="listContainer">
-            <a-list :data="families" :grid-props="{ gutter: [20, 20], sm: 24, md: 12, lg: 8, xl: 6 }">
-                <template #Item="{ family }">
-                    <a-list-item>
-                        <a-card>
-                            {{ family.name }}
-                        </a-card>
-                    </a-list-item>
-                </template>
-            </a-list>
+            <a-empty v-show="!dataCount" />
+            <FamilyItem v-for="family in families" :key="family.id" :family="family" />
         </div>
         <div class="paginationContainer">
             <a-pagination :total="dataCount" v-model:current="pageIndex" :page-size="pageSize" size="small" />
@@ -22,6 +15,7 @@ import { onMounted, watch, ref } from 'vue'
 import { useRouter, useRoute } from "vue-router";
 import { Message } from '@arco-design/web-vue';
 import { Family } from "@models/Family";
+import FamilyItem from "@components/family/FamilyItem.vue";
 import { getFamilyPageByCategoryFetch, getFamilyPageByKeywordFetch, getFamilyPageFetech } from "@/services/familyService";
 
 
@@ -65,8 +59,9 @@ onMounted(() => {
 })
 
 watch(props, () => {
-    console.log(props)
+    console.log('props changed');
 })
+
 </script>
 
 <style scoped>
@@ -80,8 +75,12 @@ watch(props, () => {
 }
 
 .listContainer {
-    flex: 1;
     width: 100%;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    border: 1px solid lightgray;
+    padding: 1em;
 }
 
 .paginationContainer {
