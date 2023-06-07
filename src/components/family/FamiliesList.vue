@@ -16,7 +16,9 @@ import { useRouter, useRoute } from "vue-router";
 import { Message } from '@arco-design/web-vue';
 import { Family } from "@models/Family";
 import FamilyItem from "@components/family/FamilyItem.vue";
-import { getFamilyPageByCategoryFetch, getFamilyPageByKeywordFetch, getFamilyPageFetech } from "@/services/familyService";
+import { getFamilyPageByCategoryFetch, getFamilyPageByKeywordFetch, getFamilyPageFetech, filterFamiliePageFetch } from "@/services/familyService";
+import { HttpResponse } from '@models/HttpResponse';
+import { PageData } from '@models/PageData';
 
 
 interface props {
@@ -40,6 +42,24 @@ const families = ref<Family[]>()
 
 function getAllFamilyPage(pageIndex: number, sort: string): void {
     const promise = getFamilyPageFetech(pageIndex, pageSize, sort);
+    fetchFamilyPage(promise);
+}
+function getFamilyPageByKeyword(keyword: string, pageIndex: number, sort: string): void {
+    const promise = getFamilyPageByKeywordFetch(keyword, pageIndex, pageSize, sort);
+    fetchFamilyPage(promise);
+}
+
+function getFamilyPageByCategory(categroyId: number, pageIndex: number, sort: string): void {
+    const promise = getFamilyPageByCategoryFetch(categroyId, pageIndex, pageSize, sort);
+    fetchFamilyPage(promise);
+}
+
+function filterFamilyPage(categoryId: string | number, keyword: string, pageIndex: number, sort: string) {
+    const promise = filterFamiliePageFetch(categoryId, keyword, pageIndex, pageSize, sort);
+    fetchFamilyPage(promise);
+}
+
+function fetchFamilyPage(promise: Promise<HttpResponse<PageData<Family>>>): void {
     promise.then(response => {
         if (response.success) {
             const familiesPage = response.response;
@@ -54,12 +74,22 @@ function getAllFamilyPage(pageIndex: number, sort: string): void {
     })
 }
 
+
+
 onMounted(() => {
     getAllFamilyPage(pageIndex.value, props.order as string);
 })
 
 watch(props, () => {
-    console.log('props changed');
+    if (props.keyword && !props.categoryId) {
+        getFamilyPageByKeyword(props.keyword, pageIndex.value, props.order as string);
+    }
+    else if (props.categoryId && !props.keyword) {
+        getFamilyPageByCategory(props.categoryId as number, pageIndex.value, props.order);
+    }
+    else {
+        filterFamilyPage(props.categoryId as number, props.keyword as string, pageIndex.value, props.order);
+    }
 })
 
 </script>

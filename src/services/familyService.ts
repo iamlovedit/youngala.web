@@ -9,7 +9,7 @@ function getFamilyCategoriesFetch(): Promise<HttpResponse<FamilyCategory[]>> {
     const promise = httpRequest.getAsync<HttpResponse<FamilyCategory[]>>('/v1/categories');
     return promise;
 }
-function getFamilyPageByCategoryFetch(categoryId: number, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
+function getFamilyPageByCategoryFetch(categoryId: number | string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
     const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>("/v1/category", {
         categoryId,
         pageIndex,
@@ -37,7 +37,7 @@ function getFamilyPageFetech(pageIndex: number, pageSize: number, sort: string):
     return promise;
 }
 
-function filterFamiliePageFetch(categoryId: number, keyword: string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
+function filterFamiliePageFetch(categoryId: number | string, keyword: string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
     const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>('/v1', {
         categoryId,
         keyword,
