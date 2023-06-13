@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Message, Tree } from "@arco-design/web-vue";
 import { getFamilyCategoriesFetch } from "@/services/familyService";
@@ -64,8 +64,8 @@ const fieldNames: TreeFieldNames = new TreeFieldNames('name', 'id')
 const router = useRouter();
 const categories = ref<FamilyCategory[]>([]);
 const searchValue = ref<string | undefined>();
-const selectedKeys = ref<(string | number)[]>([]);
-const expandedKeys = ref<(string | number)[]>([]);
+const selectedKeys = ref<(string | number)[]>([29]);
+const expandedKeys = ref<(string | number)[]>([1, 6]);
 const tags = ref<FilterTag[]>([]);
 const categoryColor: string = "#168cff";
 const keywordColor: string = "#0fc6c2";
@@ -250,13 +250,13 @@ watch(route, () => {
     }
 })
 
-onMounted(() => {
+onBeforeMount(() => {
     getFamilyCategories();
 })
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .libraryContainer {
     width: 60%;
     margin: 2em auto;

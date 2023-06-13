@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, watch, ref } from 'vue'
+import { watch, ref, onBeforeMount } from 'vue'
 import { useRouter } from "vue-router";
 import { Message } from '@arco-design/web-vue';
 import { DynamoPackage } from "@models/DynamoPackage";
@@ -89,7 +89,7 @@ watch(props, (newValue) => {
     getPackages(newValue.keyword, 1, pageSize);
 })
 
-onMounted(() => {
+onBeforeMount(() => {
     getPackages(props.keyword);
 })
 
@@ -117,7 +117,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-   
+
     width: 100%;
 }
 
