@@ -15,4 +15,12 @@ export default defineConfig({
       { find: '@components', replacement: fileURLToPath(new URL('./src/components', import.meta.url)) },
     ],
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        javascriptEnabled: true,
+        additionalData: '@import "@/styles/variable.scss";'
+      }
+    }
+  }
 });

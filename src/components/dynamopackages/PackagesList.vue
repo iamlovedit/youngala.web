@@ -9,7 +9,8 @@
                     <template #meta>
                         <div class="packageItemContainer">
                             <div class="packageItemTitle">
-                                <a-link @click="(event) => onPackageClick(event, pcakageObj)">{{ pcakageObj.name }}</a-link>
+                                <a-link @click="(event: MouseEvent) => onPackageClick(event, pcakageObj)">
+                                    {{ pcakageObj.name }}</a-link>
                             </div>
                             <div class="packageItemDescription">
                                 {{ pcakageObj.description }}
@@ -39,7 +40,7 @@ import { DynamoPackage } from "@models/DynamoPackage";
 import { getPackagesPageFetch, orderOptions } from '@/services/packageService';
 import { releaseIcon, downloadIcon, likeIcon, updateIcon } from "@assets/iconfont";
 import StatusIcon from "@components/StatusIcon.vue";
-
+import { usePackageStore } from '@/stores/modules/packages';
 
 const props = defineProps<{
     keyword?: string
@@ -51,6 +52,8 @@ const pageSize: number = 20;
 const dataCount = ref<number>(0);
 const packages = ref<DynamoPackage[]>([]);
 const router = useRouter()
+const packageStore = usePackageStore()
+
 function getPackages(keyword?: string, pageIndex: number = 1, pageSize: number = 20, orderField: string = 'downloads'): void {
     const promise = getPackagesPageFetch(keyword, pageIndex, pageSize, orderField)
     promise.then(httpResponse => {
@@ -68,6 +71,7 @@ function getPackages(keyword?: string, pageIndex: number = 1, pageSize: number =
 }
 
 function onPackageClick(event: MouseEvent, pcakageObj: DynamoPackage) {
+    packageStore.packageObj=pcakageObj
     router.push({
         name: 'packageDetail',
         params: {
@@ -96,7 +100,7 @@ onBeforeMount(() => {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .rootContainer {
     display: flex;
     flex-direction: column;

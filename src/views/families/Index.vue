@@ -259,7 +259,7 @@ onBeforeMount(() => {
 <style scoped lang="scss">
 .libraryContainer {
     width: 60%;
-    margin: 2em auto;
+    margin: $Global-MainContent-Margin;
     display: flex;
     flex-wrap: nowrap;
     gap: 1em;

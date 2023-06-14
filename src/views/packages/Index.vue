@@ -40,25 +40,25 @@ function onClear(): void {
 }
 
 </script>
-<style scoped>
+<style scoped lang="scss">
 .packageContainer {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    width: 70%;
-    margin: 2em auto;
-}
+    width: 60%;
+    margin: $Global-MainContent-Margin;
 
-.inputBoxContainer {
-    width: 320px;
-    height: fit-content;
-}
+    .inputBoxContainer {
+        width: 320px;
+        height: fit-content;
+    }
 
-.routerViewContainer {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    width: 100%;
+    .routerViewContainer {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
 }
 </style>

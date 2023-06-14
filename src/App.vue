@@ -1,7 +1,7 @@
 <template>
     <div class="rootContainer">
         <div class="headerContainer">
-            <a-menu mode="horizontal" style="height: 100%;" v-model:selected-keys=currentRoute accordion
+            <!-- <a-menu mode="horizontal" style="height: 100%;" v-model:selected-keys=currentRoute accordion
                 @menu-item-click="onMenuItemClick">
                 <a-menu-item key="0" :style="{ padding: 0, marginRight: '38px' }" disabled>
                     <div :style="{
@@ -15,7 +15,8 @@
                 <a-menu-item key="/">主 页</a-menu-item>
                 <a-menu-item key="/families">族 库</a-menu-item>
                 <a-menu-item key="/packages">节 点 包</a-menu-item>
-            </a-menu>
+            </a-menu> -->
+            <Menu />
             <div class="headerRightContainer">
                 <a-button type="text" @click="onLoginClick">登 录</a-button>
                 <a-button type="text" @click="onRegisterClick">注 册</a-button>
@@ -33,6 +34,8 @@
 <script setup lang="ts">
 import { watch, ref } from 'vue'
 import { RouterView, useRouter, useRoute } from 'vue-router';
+import { constantRoute } from '@/router/routes'
+import Menu from '@components/layout/menu/Index.vue'
 
 const router = useRouter();
 const route = useRoute();
@@ -98,7 +101,6 @@ watch(route, () => {
 .contentContainer {
     width: 100%;
     flex: 1;
-    display: flex;
 }
 
 .footContainer {

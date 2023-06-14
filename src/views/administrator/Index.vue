@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="adminContainer">
         administrator home
     </div>
 </template>
@@ -8,4 +8,8 @@
 
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.adminContainer {
+    width: 100%; 
+}
+</style>
