@@ -8,6 +8,8 @@ import { ref, watch, onMounted } from 'vue';
 import { Message, Tree } from "@arco-design/web-vue";
 import { useRouter, useRoute } from "vue-router";
 import { FamilyCategory } from '@/models/Family';
+import { useFamilyStore } from '@/stores/modules/families';
+import { getFamilyCategoriesFetch } from "@/services/familyService";
 
 class TreeFieldNames {
     constructor(title: string, key: string) {
@@ -18,6 +20,7 @@ class TreeFieldNames {
     key: string;
 }
 
+const familyStore = useFamilyStore();
 const route = useRoute();
 const fieldNames: TreeFieldNames = new TreeFieldNames('name', 'id')
 const router = useRouter();
@@ -26,10 +29,9 @@ const selectedKeys = ref<(string | number)[]>([29]);
 const expandedKeys = ref<(string | number)[]>([1, 6]);
 const tree = ref<InstanceType<typeof Tree> | null>(null)
 
-
 function OnCategorySelect(keys: (string | number)[], data: any): void {
     const selectedCategory: FamilyCategory = data.selectedNodes[0];
-    if (route.name === 'families') {
+    if (route.name === 'browser') {
         pushToSearch(selectedCategory.id)
     }
     else {
@@ -55,8 +57,22 @@ function pushToSearch(categoryId?: number | string, keyword?: string, sort: stri
     })
 }
 
+function getFamilyCategories(): void {
+    const promise = getFamilyCategoriesFetch();
+    promise.then(response => {
+        if (response.success) {
+            categories.value = response.response;
+        }
+        else {
+            Message.error(response.message)
+        }
+    }).catch(error => {
+        Message.error(error.message)
+    })
+}
+
 onMounted(() => {
-    
+    getFamilyCategories()
 })
 
 </script>

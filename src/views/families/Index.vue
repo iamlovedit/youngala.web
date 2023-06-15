@@ -54,29 +54,20 @@ import { Message, Tree } from "@arco-design/web-vue";
 import { getFamilyCategoriesFetch } from "@/services/familyService";
 import { FamilyCategory } from "@models/Family";
 import { FilterTag, FilterType } from "@models/OrderOption"
+import { useFamilyStore } from "@/stores/modules/families";
 
 import Header from "@components/layout/header/Index.vue";
 import Footer from "@components/layout/footer/Index.vue";
 
-class TreeFieldNames {
-    constructor(title: string, key: string) {
-        this.title = title;
-        this.key = key;
-    }
-    title: string;
-    key: string;
-}
-
 const route = useRoute();
-const fieldNames: TreeFieldNames = new TreeFieldNames('name', 'id')
 const router = useRouter();
-const categories = ref<FamilyCategory[]>([]);
 const searchValue = ref<string | undefined>();
 const selectedKeys = ref<(string | number)[]>([29]);
 const expandedKeys = ref<(string | number)[]>([1, 6]);
 const tags = ref<FilterTag[]>([]);
 const categoryColor: string = "#168cff";
 const keywordColor: string = "#0fc6c2";
+const familyStore = useFamilyStore();
 
 const tree = ref<InstanceType<typeof Tree> | null>(null)
 const checkedOrder = ref<string>('name')
@@ -214,10 +205,10 @@ function onCloseTag(tag: FilterTag): void {
  * @return {Promise} A promise that resolves with the categories or rejects with an error message.
  */
 function getFamilyCategories(): void {
-    let promise = getFamilyCategoriesFetch();
+    const promise = getFamilyCategoriesFetch();
     promise.then(response => {
         if (response.success) {
-            categories.value = response.response;
+            familyStore.categories = response.response;
         }
         else {
             Message.error(response.message)
@@ -251,15 +242,11 @@ function pushToSearch(categoryId?: number | string, keyword?: string, sort: stri
 }
 
 watch(route, () => {
-    if (route.name === 'families') {
+    if (route.name === 'family') {
         clearTreeSelected();
         clearFilterTags();
         searchValue.value = undefined
     }
-})
-
-onBeforeMount(() => {
-    getFamilyCategories();
 })
 
 </script>

@@ -1,26 +1,71 @@
 <template>
-    <FamiliesList :keyword="keyword" :categoryId="categoryId" :order="orderOption" />
+    <div class="browserContainer">
+        <div class="categoriesContainer">
+            <CategoryTree />
+        </div>
+        <div class="mainContainer">
+            <div class="searchContainer">
+                <SearchBox />
+            </div>
+            <div class="filtersContainer">
+                <FilterTags />
+            </div>
+            <div class="sortContainer">
+                <SortOptions />
+            </div>
+            <div class="listContainer">
+
+            </div>
+            <div class="paginationContainer">
+                <FamilyPagination />
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { useRoute } from "vue-router";
-import { ref, watch } from "vue";
-import FamiliesList from "@components/family/FamiliesList.vue";
+import CategoryTree from '@components/family/CategoryTree.vue';
+import SearchBox from '@/components/family/SearchBox.vue';
+import FilterTags from '@/components/family/FilterTags.vue';
+import SortOptions from '@/components/family/SortOptions.vue';
+import FamilyPagination from '@/components/family/FamilyPagination.vue';
 
-const route = useRoute();
 
-const keyword = ref<string>(route.query['keyword'] as string);
-const categoryId = ref<number>(parseInt(route.query['categoryId'] as string));
-const orderOption = ref<string>(route.query['orderOption'] as string);
-
-watch(() => [route.query], () => {
-    keyword.value = route.query['keyword'] as string;
-    categoryId.value = parseInt(route.query['categoryId'] as string);
-    orderOption.value = route.query['orderOption'] as string;
-}, {
-    immediate: true,
-    deep: true
-})
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.browserContainer {
+    width: 60%;
+    margin: $Global-MainContent-Margin;
+    height: calc(100% - 2em);
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1em;
+
+    .categoriesContainer {
+        width: 280px;
+        border: 1px solid lightgrey;
+        padding: 1em;
+        height: 100%;
+    }
+
+    .mainContainer {
+        flex: 1;
+        display: flex;
+        height: calc(100% - 2em);
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 1em;
+    }
+
+    .filtersContainer .searchContainer .sortContainer .paginationContainer {
+        height: fit-content;
+        width: 100%;
+    }
+
+    .listContainer {
+        flex: 1;
+        width: 100%;
+    }
+}
+</style>
