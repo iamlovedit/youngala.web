@@ -1,6 +1,10 @@
 <template>
     <div class="libraryContainer">
-        <div class="categoryContainer">
+        <Header />
+        <div class="contentContainer">
+            <RouterView />
+        </div>
+        <!-- <div class="categoryContainer">
             <a-tree :data="categories" :field-names="fieldNames" v-model:selected-keys=selectedKeys
                 v-model:expanded-keys=expandedKeys ref="tree" @select="OnCategorySelect" />
         </div>
@@ -38,7 +42,8 @@
                 </a-radio-group>
             </div>
             <RouterView />
-        </div>
+        </div> -->
+        <Footer />
     </div>
 </template>
 
@@ -49,6 +54,9 @@ import { Message, Tree } from "@arco-design/web-vue";
 import { getFamilyCategoriesFetch } from "@/services/familyService";
 import { FamilyCategory } from "@models/Family";
 import { FilterTag, FilterType } from "@models/OrderOption"
+
+import Header from "@components/layout/header/Index.vue";
+import Footer from "@components/layout/footer/Index.vue";
 
 class TreeFieldNames {
     constructor(title: string, key: string) {
@@ -258,11 +266,18 @@ onBeforeMount(() => {
 
 <style scoped lang="scss">
 .libraryContainer {
-    width: 60%;
-    margin: $Global-MainContent-Margin;
+    width: 100%;
+    height: 100vh;
     display: flex;
     flex-wrap: nowrap;
-    gap: 1em;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .contentContainer {
+        flex: 1;
+        width: 100%;
+        height: calc(100vh - 64px - 40px);
+    }
 }
 
 .categoryContainer {

@@ -5,25 +5,20 @@ export const constantRoute = [
         name: 'home',
         meta: {
             title: '首页',
-            hidden: false
-        }
-    },
-    {
-        path: '/home',
-        redirect: '/',
-        meta: {
-            title: '',
-            hidden: true
+            hidden: false,
         }
     },
     {
         path: '/admin',
         name: 'admin',
         meta: {
-            title: '',
+            title: '管理后台',
             hidden: true
         },
-        component: () => import('@/views/administrator/Index.vue')
+        component: () => import('@/views/administrator/Index.vue'),
+        children: [
+
+        ]
     },
     {
         path: '/login',
@@ -48,7 +43,7 @@ export const constantRoute = [
         component: () => import('@/views/families/Index.vue'),
         meta: {
             title: '族库',
-            hidden: false
+            hidden: false,
         },
         children: [
             {
@@ -73,7 +68,7 @@ export const constantRoute = [
         component: () => import('@/views/packages/Index.vue'),
         meta: {
             title: '节点包',
-            hidden: false
+            hidden: false,
         },
         children: [
             {

@@ -17,7 +17,7 @@ import { src } from "@assets/iconfont"
 
 
 interface Props {
-    title: string | number | undefined,
+    title: string | undefined,
     size: number | undefined,
     type: string | undefined
     tooltip: string | undefined

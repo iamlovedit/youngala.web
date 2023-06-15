@@ -1,19 +1,30 @@
 <template>
-    <template v-for="route in props.routes" :key="route.path" v-if="!route.meta.hidden">
-        <a-menu-item>
-            {{ route.meta.title }}
-        </a-menu-item>
-    </template>
+    <a-menu mode="horizontal" style="height: 100%;" v-model:selected-keys=currentRoute accordion
+        @menu-item-click="onMenuItemClick">
+        <template v-for="item in constantRoute">
+            <a-menu-item :key="item.path" v-if="!item.meta.hidden">
+                {{ item.meta.title }}
+            </a-menu-item>
+        </template>
+    </a-menu>
 </template>
 
 <script setup lang="ts">
-import { RouteRecordRaw } from 'vue-router';
-
-interface props {
-    routes: RouteRecordRaw[]
+import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue'
+import { constantRoute } from '@/router/routes'
+const currentRoute = ref<Array<string>>([]);
+const route = useRoute();
+const router = useRouter();
+function onMenuItemClick(key: string) {
+    router.push({
+        path: key
+    })
 }
 
-const props = defineProps<props>();
+onMounted(() => {
+    currentRoute.value = new Array<string>(route.matched[0].path);
+})
 </script>
 
 <style scoped></style>

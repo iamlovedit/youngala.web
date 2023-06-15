@@ -1,17 +1,24 @@
 <template>
     <div class="packageContainer">
-        <div class="inputBoxContainer">
+        <Header />
+        <div class="contentContainer">
+            <RouterView />
+        </div>
+        <Footer />
+        <!-- <div class="inputBoxContainer">
             <a-input-search placeholder="输入节点包名称" v-model="searchInputValue" search-button @search="onSearchClick"
                 allow-clear @clear="onClear" />
         </div>
         <div class="routerViewContainer">
             <RouterView />
-        </div>
+        </div> -->
     </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterView, useRouter, useRoute } from "vue-router";
+import Header from "@components/layout/header/Index.vue";
+import Footer from "@components/layout/footer/Index.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -42,11 +49,16 @@ function onClear(): void {
 </script>
 <style scoped lang="scss">
 .packageContainer {
+    width: 100%;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
     flex-wrap: nowrap;
-    width: 60%;
-    margin: $Global-MainContent-Margin;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .contentContainer {
+        flex: 1;
+    }
 
     .inputBoxContainer {
         width: 320px;

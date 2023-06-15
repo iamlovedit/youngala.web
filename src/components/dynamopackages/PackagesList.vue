@@ -16,10 +16,10 @@
                                 {{ pcakageObj.description }}
                             </div>
                             <div class="statusContainer">
-                                <StatusIcon :title="pcakageObj.createTime" :type=releaseIcon tooltip="发布时间" />
-                                <StatusIcon :title="pcakageObj.updateTime" :type=updateIcon tooltip="更新时间" />
-                                <StatusIcon :title="pcakageObj.votes" :type=likeIcon tooltip="点赞量" />
-                                <StatusIcon :title="pcakageObj.downloads" :type=downloadIcon tooltip="下载量" />
+                                <StatusIcon :title="pcakageObj.createTime" :type=releaseIcon :size="16" tooltip="发布时间" />
+                                <StatusIcon :title="pcakageObj.updateTime" :type=updateIcon :size="16" tooltip="更新时间" />
+                                <StatusIcon :title="pcakageObj.votes" :type=likeIcon :size="16" tooltip="点赞量" />
+                                <StatusIcon :title="pcakageObj.downloads" :type=downloadIcon :size="16" tooltip="下载量" />
                             </div>
                         </div>
                     </template>
@@ -71,7 +71,7 @@ function getPackages(keyword?: string, pageIndex: number = 1, pageSize: number =
 }
 
 function onPackageClick(event: MouseEvent, pcakageObj: DynamoPackage) {
-    packageStore.packageObj=pcakageObj
+    packageStore.packageObj = pcakageObj
     router.push({
         name: 'packageDetail',
         params: {
