@@ -18,10 +18,18 @@ export const useFamilyStore = defineStore('family', () => {
             }
         })
     }
+
+    function pushToFamilyHome(): void {
+        router.push({
+            name: 'families',
+        })
+    }
+
     return {
         family,
         category,
         categories,
-        pushToSearch
+        pushToSearch,
+        pushToFamilyHome
     }
 })

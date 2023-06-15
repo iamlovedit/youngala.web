@@ -39,7 +39,7 @@ export const constantRoute = [
         component: () => import('@/views/authorize/Register.vue')
     },
     {
-        path: '/families',
+        path: '/family',
         component: () => import('@/views/families/Index.vue'),
         meta: {
             title: '族库',
@@ -64,7 +64,7 @@ export const constantRoute = [
         ]
     },
     {
-        path: '/packages',
+        path: '/package',
         component: () => import('@/views/packages/Index.vue'),
         meta: {
             title: '节点包',

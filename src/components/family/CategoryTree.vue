@@ -55,6 +55,9 @@ function pushToSearch(categoryId?: number | string, keyword?: string, sort: stri
     })
 }
 
+onMounted(() => {
+    
+})
 
 </script>
 

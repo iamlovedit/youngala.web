@@ -276,7 +276,6 @@ onBeforeMount(() => {
     .contentContainer {
         flex: 1;
         width: 100%;
-        height: calc(100vh - 64px - 40px);
     }
 }
 
