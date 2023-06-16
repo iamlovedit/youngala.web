@@ -1,7 +1,8 @@
 <template>
-    <div class="filtersContainer">
+    <div class="filtersContainer" v-show="familyStore.filterTags.length">
         <div class="tagsContainer">
-            <a-tag v-for="tag in tags" :key="tag.value" :color="tag.color" closable @close="() => onCloseTag(tag)">
+            <a-tag v-for="tag in familyStore.filterTags" :key="tag.value" :color="tag.color" closable
+                @close="() => onCloseTag(tag)">
                 {{ tag.value }}
             </a-tag>
         </div>
@@ -12,17 +13,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { FilterTag, FilterType } from "@models/OrderOption"
-const tags = ref<FilterTag[]>([]);
+import { FilterTag } from "@models/OrderOption"
+import { useFamilyStore } from '@/stores/modules/families';
 
-
+const familyStore = useFamilyStore();
 function onCloseTag(tag: FilterTag): void {
-
+    familyStore.removeTag(tag);
 }
 
 function onClearButtonClick(): void {
-
+    familyStore.clearTags();
+    familyStore.clearTreeSelected();
+    familyStore.pushToFamilyHome();
 }
 </script>
 

@@ -1,14 +1,17 @@
 <template>
-    <a-tree :data="categories" :field-names="fieldNames" v-model:selected-keys=selectedKeys
-        v-model:expanded-keys=expandedKeys ref="tree" @select="OnCategorySelect" />
+    <a-scrollbar style="height:100%;overflow: auto;">
+        <a-tree :data="categories" :field-names="fieldNames" v-model:selected-keys="familyStore.selectedKeys"
+            v-model:expanded-keys="familyStore.expandedKeys" ref="tree" @select="OnCategorySelect" />
+    </a-scrollbar>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { Message, Tree } from "@arco-design/web-vue";
-import { useRouter, useRoute } from "vue-router";
-import { FamilyCategory } from '@/models/Family';
+import { useRoute } from "vue-router";
+import { Family, FamilyCategory } from '@/models/Family';
 import { useFamilyStore } from '@/stores/modules/families';
+import { FilterType, FilterTag } from '@/models/OrderOption'
 import { getFamilyCategoriesFetch } from "@/services/familyService";
 
 class TreeFieldNames {
@@ -23,45 +26,40 @@ class TreeFieldNames {
 const familyStore = useFamilyStore();
 const route = useRoute();
 const fieldNames: TreeFieldNames = new TreeFieldNames('name', 'id')
-const router = useRouter();
 const categories = ref<FamilyCategory[]>([]);
-const selectedKeys = ref<(string | number)[]>([29]);
-const expandedKeys = ref<(string | number)[]>([1, 6]);
 const tree = ref<InstanceType<typeof Tree> | null>(null)
 
 function OnCategorySelect(keys: (string | number)[], data: any): void {
     const selectedCategory: FamilyCategory = data.selectedNodes[0];
+    familyStore.selectedCategory = selectedCategory;
+    const categoryTag: FilterTag = familyStore.createTag(selectedCategory.name, FilterType.Category);
+    familyStore.clearTags();
+    familyStore.addTag(categoryTag);
     if (route.name === 'browser') {
-        pushToSearch(selectedCategory.id)
+        familyStore.pushToSearch(selectedCategory.id)
     }
     else {
         //in search route
         var keyword = route.query['keyword']
         if (keyword != undefined) {
-            pushToSearch(selectedCategory.id, keyword.toString())
+            const keywordTag = familyStore.createTag(keyword.toString(), FilterType.Keyword);
+            familyStore.addTag(keywordTag);
+            familyStore.pushToSearch(selectedCategory.id, keyword.toString())
         }
         else {
-            pushToSearch(selectedCategory.id)
+            familyStore.pushToSearch(selectedCategory.id)
         }
     }
 }
 
-function pushToSearch(categoryId?: number | string, keyword?: string, sort: string = 'name'): void {
-    router.push({
-        name: 'familySearch',
-        query: {
-            categoryId: categoryId,
-            keyword: keyword,
-            sort: sort
-        }
-    })
-}
 
 function getFamilyCategories(): void {
     const promise = getFamilyCategoriesFetch();
     promise.then(response => {
         if (response.success) {
             categories.value = response.response;
+            const ancestors = getAncestors(categories.value, parseInt(route.query['categoryId']?.toLocaleString() as string));
+            console.log(ancestors)
         }
         else {
             Message.error(response.message)
@@ -71,8 +69,37 @@ function getFamilyCategories(): void {
     })
 }
 
-onMounted(() => {
+function getAncestors(categories: FamilyCategory[], targetId: number): FamilyCategory[] {
+    const ancestors: FamilyCategory[] = []
+    findNode(categories, targetId, ancestors)
+    return ancestors
+}
+
+function findNode(categories: FamilyCategory[], targetId: number, ancestors: FamilyCategory[]): boolean {
+    for (const node of categories) {
+        if (node.id === targetId) {
+            return true
+        }
+        if (findNode(node.children, targetId, ancestors)) {
+            ancestors.unshift(node)
+        }
+    }
+    return false;
+}
+
+
+onBeforeMount(() => {
     getFamilyCategories()
+})
+
+onMounted(() => {
+    if (route.name === 'browser') {
+        familyStore.clearTags();
+    }
+    else {
+        const categoryId: number = parseInt(route.query['categoryId']?.toLocaleString() as string);
+        familyStore.selectedKeys.push(categoryId)
+    }
 })
 
 </script>

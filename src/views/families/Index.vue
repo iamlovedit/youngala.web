@@ -1,50 +1,7 @@
 <template>
-    <div class="libraryContainer">
-        <Header />
-        <div class="contentContainer">
-            <RouterView />
-        </div>
-        <!-- <div class="categoryContainer">
-            <a-tree :data="categories" :field-names="fieldNames" v-model:selected-keys=selectedKeys
-                v-model:expanded-keys=expandedKeys ref="tree" @select="OnCategorySelect" />
-        </div>
-        <div class=" familyContainer">
-            <div class="searchContainer">
-                <a-input-search placeholder="搜索族" v-model:model-value="searchValue" search-button @search="onSearchClick"
-                    allow-clear />
-            </div>
-            <div class="filtersContainer" v-show="tags.length">
-                <div class="tagsContainer">
-                    <a-tag v-for="tag in tags" :key="tag.value" :color="tag.color" closable @close="() => onCloseTag(tag)">
-                        {{ tag.value }}
-                    </a-tag>
-                </div>
-                <a-button type="outline" @click="onClearButtonClick">
-                    清除条件
-                </a-button>
-            </div>
-            <div class="orderContainer">
-                <a-radio-group type="button" v-model:model-value=checkedOrder @change="onOrderChange">
-                    <a-grid :cols="4" :colGap="16">
-                        <a-grid-item>
-                            <a-radio value="name">综合排序</a-radio>
-                        </a-grid-item>
-                        <a-grid-item>
-                            <a-radio value="download">最多下载</a-radio>
-                        </a-grid-item>
-                        <a-grid-item>
-                            <a-radio value="latest">最新发布</a-radio>
-                        </a-grid-item>
-                        <a-grid-item>
-                            <a-radio value="stars">最多收藏</a-radio>
-                        </a-grid-item>
-                    </a-grid>
-                </a-radio-group>
-            </div>
-            <RouterView />
-        </div> -->
-        <Footer />
-    </div>
+    <Content>
+        <RouterView />
+    </Content>
 </template>
 
 <script setup lang="ts">
@@ -55,9 +12,7 @@ import { getFamilyCategoriesFetch } from "@/services/familyService";
 import { FamilyCategory } from "@models/Family";
 import { FilterTag, FilterType } from "@models/OrderOption"
 import { useFamilyStore } from "@/stores/modules/families";
-
-import Header from "@components/layout/header/Index.vue";
-import Footer from "@components/layout/footer/Index.vue";
+import Content from '@components/layout/content/Index.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -83,33 +38,6 @@ if (route.name !== 'families') {
     if (keyword) {
         searchValue.value = keyword
         tags.value.push(createTag(keyword, FilterType.Keyword));
-    }
-}
-
-/**
- * Handles the event of selecting a category.
- * @param {(string | number)[]} keys - An array of keys.
- * @param {any} data - Data associated with the event.
- * @return {void} Does not return anything.
- */
-function OnCategorySelect(keys: (string | number)[], data: any): void {
-    const selectedCategory: FamilyCategory = data.selectedNodes[0];
-    const categoryTag: FilterTag = createTag(selectedCategory.name, FilterType.Category);
-    tags.value = []
-    tags.value.push(categoryTag);
-    if (route.name === 'families') {
-        pushToSearch(selectedCategory.id)
-    }
-    else {
-        //in search route
-        var keyword = route.query['keyword']
-        if (keyword != undefined) {
-            tags.value.push(createTag(keyword.toString(), FilterType.Keyword));
-            pushToSearch(selectedCategory.id, keyword.toString())
-        }
-        else {
-            pushToSearch(selectedCategory.id)
-        }
     }
 }
 
@@ -251,58 +179,4 @@ watch(route, () => {
 
 </script>
 
-<style scoped lang="scss">
-.libraryContainer {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    justify-content: space-between;
-
-    .contentContainer {
-        flex: 1;
-        width: 100%;
-    }
-}
-
-.categoryContainer {
-    width: 280px;
-    border: 1px solid lightgrey;
-    padding: 1em;
-}
-
-.familyContainer {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    flex-wrap: nowrap;
-}
-
-.searchContainer {
-    width: 100%;
-    margin: 0;
-}
-
-.filtersContainer {
-    width: 100%;
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.tagsContainer {
-    flex: 1;
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 1em;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-.orderContainer {
-    width: 100%;
-}
-</style>
+<style scoped lang="scss"></style>
