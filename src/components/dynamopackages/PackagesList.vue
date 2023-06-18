@@ -105,8 +105,9 @@ onBeforeMount(() => {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    width: 100%;
+    width: 60%;
     height: 100%;
+    margin: $Global-MainContent-Margin;
 }
 
 .orderOptionContainer {

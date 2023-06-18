@@ -18,11 +18,14 @@ function onSearchClick(inputValue: string): void {
         familyStore.clearTags();
         const keywordTag: FilterTag = familyStore.createTag(inputValue, FilterType.Keyword);
         if (route.name == "browser") {
-            familyStore.pushToSearch(parseInt(route.query['categoryId']?.toLocaleString() as string));
+            familyStore.addTag(keywordTag);
+            familyStore.pushToSearch(undefined, inputValue, familyStore.checkedOrder);
         }
         else {
-            familyStore.pushToFamilyHome();
-
+            const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category);
+            familyStore.addTag(categoryTag);
+            familyStore.addTag(keywordTag);
+            familyStore.pushToSearch(familyStore.selectedCategory?.id, inputValue, familyStore.checkedOrder)
         }
 
     }

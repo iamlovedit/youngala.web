@@ -1,24 +1,12 @@
 <template>
-    <div class="packageContainer">
-        <Header />
-        <div class="contentContainer">
-            <RouterView />
-        </div>
-        <Footer />
-        <!-- <div class="inputBoxContainer">
-            <a-input-search placeholder="输入节点包名称" v-model="searchInputValue" search-button @search="onSearchClick"
-                allow-clear @clear="onClear" />
-        </div>
-        <div class="routerViewContainer">
-            <RouterView />
-        </div> -->
-    </div>
+    <Content>
+        <RouterView />
+    </Content>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { RouterView, useRouter, useRoute } from "vue-router";
-import Header from "@components/layout/header/Index.vue";
-import Footer from "@components/layout/footer/Index.vue";
+import Content from '@components/layout/content/Index.vue';
 
 const router = useRouter();
 const route = useRoute();

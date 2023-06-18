@@ -14,7 +14,7 @@
                 <SortOptions />
             </div>
             <div class="listContainer">
-
+                <FamiliesList />
             </div>
             <div class="paginationContainer">
                 <FamilyPagination />
@@ -24,12 +24,28 @@
 </template>
 
 <script setup lang="ts">
+import { watch } from 'vue'
 import CategoryTree from '@components/family/CategoryTree.vue';
 import SearchBox from '@/components/family/SearchBox.vue';
 import FilterTags from '@/components/family/FilterTags.vue';
 import SortOptions from '@/components/family/SortOptions.vue';
+import FamiliesList from '@/components/family/FamiliesList.vue';
 import FamilyPagination from '@/components/family/FamilyPagination.vue';
 
+import { useFamilyStore } from '@/stores/modules/families';
+
+const familyStore = useFamilyStore();
+
+// watch(familyStore.route, () => {
+//     const categoryId = familyStore.route.query.categoryId;
+//     const keyword = familyStore.route.query.keyword;
+//     if (!categoryId && !keyword) {
+//         familyStore.clearTags();
+//         familyStore.clearTreeSelected();
+//         familyStore.searchValue = undefined;
+//         familyStore.expandedKeys = [];
+//     }
+// })
 
 </script>
 
@@ -66,6 +82,7 @@ import FamilyPagination from '@/components/family/FamilyPagination.vue';
     .listContainer {
         flex: 1;
         width: 100%;
+        border: 1px solid lightgrey;
     }
 }
 </style>

@@ -45,11 +45,18 @@ export const constantRoute = [
             title: '族库',
             hidden: false,
         },
+        redirect: {
+            name: 'familySearch',
+            query: {
+                pageIndex: 1,
+                sort: 'name'
+            }
+        },
         children: [
             {
-                path: '',
+                path: 'browser',
                 name: 'browser',
-                component: () => import('@/views/families/Browser.vue')
+                component: () => import('@/views/families/Browser.vue'),
             },
             {
                 path: ':id(\\d+)',
@@ -89,8 +96,16 @@ export const constantRoute = [
         ]
     },
     {
-        path: '/:catch(.*)',
+        path: '/404',
         name: '404',
+        meta: {
+            title: '404',
+            hidden: true
+        },
+        component: () => import('@/views/errors/404.vue')
+    },
+    {
+        path: '/:catch(.*)',
         meta: {
             title: '',
             hidden: true

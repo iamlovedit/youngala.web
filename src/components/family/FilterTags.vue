@@ -36,4 +36,12 @@ function onClearButtonClick(): void {
     align-items: center;
     justify-content: space-between;
 }
+
+.tagsContainer {
+    display: flex;
+    flex: 1;
+    gap: 1em;
+    flex-wrap: nowrap;
+    align-items: center;
+}
 </style>

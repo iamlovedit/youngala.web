@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref, onMounted, onBeforeMount, watch } from 'vue';
 import { Message, Tree } from "@arco-design/web-vue";
 import { useRoute } from "vue-router";
 import { Family, FamilyCategory } from '@/models/Family';
@@ -24,7 +24,7 @@ class TreeFieldNames {
 }
 
 const familyStore = useFamilyStore();
-const route = useRoute();
+const route = familyStore.route;
 const fieldNames: TreeFieldNames = new TreeFieldNames('name', 'id')
 const categories = ref<FamilyCategory[]>([]);
 const tree = ref<InstanceType<typeof Tree> | null>(null)
@@ -36,7 +36,7 @@ function OnCategorySelect(keys: (string | number)[], data: any): void {
     familyStore.clearTags();
     familyStore.addTag(categoryTag);
     if (route.name === 'browser') {
-        familyStore.pushToSearch(selectedCategory.id)
+        familyStore.pushToSearch(selectedCategory.id, undefined, familyStore.checkedOrder);
     }
     else {
         //in search route
@@ -44,10 +44,10 @@ function OnCategorySelect(keys: (string | number)[], data: any): void {
         if (keyword != undefined) {
             const keywordTag = familyStore.createTag(keyword.toString(), FilterType.Keyword);
             familyStore.addTag(keywordTag);
-            familyStore.pushToSearch(selectedCategory.id, keyword.toString())
+            familyStore.pushToSearch(selectedCategory.id, keyword.toString(), familyStore.checkedOrder)
         }
         else {
-            familyStore.pushToSearch(selectedCategory.id)
+            familyStore.pushToSearch(selectedCategory.id, undefined, familyStore.checkedOrder);
         }
     }
 }
@@ -58,8 +58,7 @@ function getFamilyCategories(): void {
     promise.then(response => {
         if (response.success) {
             categories.value = response.response;
-            const ancestors = getAncestors(categories.value, parseInt(route.query['categoryId']?.toLocaleString() as string));
-            console.log(ancestors)
+
         }
         else {
             Message.error(response.message)
@@ -69,39 +68,24 @@ function getFamilyCategories(): void {
     })
 }
 
-function getAncestors(categories: FamilyCategory[], targetId: number): FamilyCategory[] {
-    const ancestors: FamilyCategory[] = []
-    findNode(categories, targetId, ancestors)
-    return ancestors
-}
-
-function findNode(categories: FamilyCategory[], targetId: number, ancestors: FamilyCategory[]): boolean {
-    for (const node of categories) {
-        if (node.id === targetId) {
-            return true
-        }
-        if (findNode(node.children, targetId, ancestors)) {
-            ancestors.unshift(node)
-        }
-    }
-    return false;
-}
-
-
 onBeforeMount(() => {
     getFamilyCategories()
 })
 
 onMounted(() => {
-    if (route.name === 'browser') {
-        familyStore.clearTags();
-    }
-    else {
-        const categoryId: number = parseInt(route.query['categoryId']?.toLocaleString() as string);
+    const categoryId: number | undefined = parseInt(route.query['categoryId']?.toLocaleString() as string);
+    if (categoryId) {
         familyStore.selectedKeys.push(categoryId)
+        const category = familyStore.categories?.find(category => category.id === categoryId);
+        if (category) {
+            const parentIds = familyStore.findParentIds(category);
+            familyStore.expandedKeys = parentIds
+        }
     }
 })
+watch(route, () => {
 
+})
 </script>
 
 <style scoped lang="scss"></style>

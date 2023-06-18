@@ -1,5 +1,5 @@
 <template>
-    <a-radio-group type="button" v-model:model-value=checkedOrder @change="onOrderChange">
+    <a-radio-group type="button" v-model:model-value="familyStore.checkedOrder" @change="onOrderChange">
         <a-grid :cols="4" :colGap="16">
             <a-grid-item>
                 <a-radio value="name">综合排序</a-radio>
@@ -18,21 +18,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRoute, useRouter } from "vue-router";
 import { useFamilyStore } from '@stores/modules/families'
 
 
 const router = useRouter()
 const route = useRoute()
-const checkedOrder = ref<string>('name')
 const familyStore = useFamilyStore();
 
 function onOrderChange(value: string | number | boolean) {
-    if (route.name === "families") {
+    if (route.name === "browser") {
         // pushToSearch(undefined, undefined, value as string)
         router.push({
-            name: 'families',
+            name: 'browser',
             query: {
                 sort: value as string
             }

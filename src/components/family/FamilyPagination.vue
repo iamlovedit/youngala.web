@@ -1,12 +1,22 @@
 <template>
-    <a-pagination :total="dataCount" v-model:current="pageIndex" :page-size="pageSize" size="small" />
+    <a-pagination :total="familyStore.dataCount" v-model:current="familyStore.pageIndex" :page-size="pageSize"
+        size="small" />
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-const pageIndex = ref<number>(1);
+import { useFamilyStore } from '@/stores/modules/families';
+import { watch, onMounted } from "vue";
 const pageSize = 20;
-const dataCount = ref<number>(0);
+const familyStore = useFamilyStore();
+
+
+watch(() => { familyStore.pageIndex }, () => {
+
+})
+
+onMounted(() => {
+    
+})
 
 </script>
 

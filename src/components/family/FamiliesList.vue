@@ -1,12 +1,7 @@
 <template>
-    <div class="familiesContainer">
-        <div class="listContainer">
-            <a-empty v-show="!dataCount" />
-            <FamilyItem v-for="family in families" :key="family.id" :family="family" />
-        </div>
-        <div class="paginationContainer">
-            <a-pagination :total="dataCount" v-model:current="pageIndex" :page-size="pageSize" size="small" />
-        </div>
+    <div class="listContainer">
+        <a-empty v-show="!familyStore.dataCount" />
+        <FamilyItem v-for="family in familyStore.families" :key="family.id" :family="family" />
     </div>
 </template>
 
@@ -19,7 +14,7 @@ import FamilyItem from "@components/family/FamilyItem.vue";
 import { getFamilyPageByCategoryFetch, getFamilyPageByKeywordFetch, getFamilyPageFetech, filterFamiliePageFetch } from "@/services/familyService";
 import { HttpResponse } from '@models/HttpResponse';
 import { PageData } from '@models/PageData';
-
+import { useFamilyStore } from '@/stores/modules/families';
 
 interface props {
     categoryId: number | undefined,
@@ -35,6 +30,7 @@ const props = withDefaults(defineProps<props>(), {
 
 const router = useRouter();
 const route = useRoute();
+const familyStore = useFamilyStore();
 const pageIndex = ref<number>(1);
 const pageSize = 20;
 const dataCount = ref<number>(0);
@@ -107,10 +103,7 @@ watch(props, () => {
 .listContainer {
     width: 100%;
     display: flex;
-    gap: 16px;
     flex-wrap: wrap;
-    border: 1px solid lightgray;
-    padding: 1em;
 }
 
 .paginationContainer {
