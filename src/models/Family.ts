@@ -1,5 +1,6 @@
 interface FamilyCategory {
     id: number;
+    parentId: number;
     code: string;
     name: string;
     children: FamilyCategory[];

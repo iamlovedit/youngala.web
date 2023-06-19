@@ -1,9 +1,12 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
+import { Message } from '@arco-design/web-vue';
 import { useRouter, useRoute } from 'vue-router'
 import { Family, FamilyCategory } from '@/models/Family'
 import { FilterTag, FilterType } from '@/models/OrderOption'
-
+import { getFamilyPageByCategoryFetch, getFamilyPageByKeywordFetch, getFamilyPageFetech, filterFamiliePageFetch, getFamilyCategoriesFetch } from "@/services/familyService";
+import { HttpResponse } from '@/models/HttpResponse';
+import { PageData } from '@/models/PageData';
 
 export const useFamilyStore = defineStore('family', () => {
     const family = ref<Family>()
@@ -22,12 +25,14 @@ export const useFamilyStore = defineStore('family', () => {
     const pageIndex = ref<number>(1);
     const dataCount = ref<number>(0);
     const families = ref<Family[]>();
+    const pageSize = 20;
     function pushToSearch(categoryId?: number | string, keyword?: string, sort: string = 'name'): void {
         router.push({
             name: 'familySearch',
             query: {
                 categoryId: categoryId,
                 keyword: keyword,
+                pageIndex: 1,
                 sort: sort
             }
         })
@@ -60,8 +65,9 @@ export const useFamilyStore = defineStore('family', () => {
         expandedKeys.value = [];
     }
     function findParentIds(category: FamilyCategory): number[] {
+        console.log(category)
         const parentIds: number[] = [];
-        let parent = category.parent
+        let parent: FamilyCategory = category.parent
         while (parent) {
             parentIds.push(parent.id)
             parent = parent.parent
@@ -71,14 +77,51 @@ export const useFamilyStore = defineStore('family', () => {
 
     watch(route, () => {
         categoryId.value = route.query.categoryId?.toLocaleString();
-        searchValue.value = route.query.keyword?.toLocaleString();
+        searchValue.value = route.query.keyword?.toLocaleString()
         if (!categoryId.value && !searchValue.value) {
             clearTags();
             clearTreeSelected();
             expandedKeys.value = [];
+            checkedOrder.value = 'name'
+            pageIndex.value = 1
         }
-
     })
+
+
+    function getAllFamilyPage(pageIndex: number, sort: string): void {
+        const promise = getFamilyPageFetech(pageIndex, pageSize, sort);
+        fetchFamilyPage(promise);
+    }
+    function getFamilyPageByKeyword(keyword: string, pageIndex: number, sort: string): void {
+        const promise = getFamilyPageByKeywordFetch(keyword, pageIndex, pageSize, sort);
+        fetchFamilyPage(promise);
+    }
+
+    function getFamilyPageByCategory(categroyId: number, pageIndex: number, sort: string): void {
+        const promise = getFamilyPageByCategoryFetch(categroyId, pageIndex, pageSize, sort);
+        fetchFamilyPage(promise);
+    }
+
+    function filterFamilyPage(categoryId: string | number, keyword: string, pageIndex: number, sort: string) {
+        const promise = filterFamiliePageFetch(categoryId, keyword, pageIndex, pageSize, sort);
+        fetchFamilyPage(promise);
+    }
+
+    function fetchFamilyPage(promise: Promise<HttpResponse<PageData<Family>>>): void {
+        promise.then(response => {
+            if (response.success) {
+                const familiesPage = response.response;
+                families.value = familiesPage.data
+                dataCount.value = familiesPage.dataCount
+            }
+            else {
+                Message.error(response.message)
+            }
+        }).catch(error => {
+            Message.error("网络请求错误:", error.message)
+        })
+    }
+
 
     return {
         router,
@@ -102,6 +145,10 @@ export const useFamilyStore = defineStore('family', () => {
         removeTag,
         createTag,
         clearTreeSelected,
-        findParentIds
+        findParentIds,
+        getAllFamilyPage,
+        getFamilyPageByKeyword,
+        getFamilyPageByCategory,
+        filterFamilyPage
     }
 })

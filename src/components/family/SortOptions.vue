@@ -18,30 +18,17 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useFamilyStore } from '@stores/modules/families'
-
-
-const router = useRouter()
 const route = useRoute()
 const familyStore = useFamilyStore();
 
 function onOrderChange(value: string | number | boolean) {
-    if (route.name === "browser") {
-        // pushToSearch(undefined, undefined, value as string)
-        router.push({
-            name: 'browser',
-            query: {
-                sort: value as string
-            }
-        })
-    }
-    else {
-        const categoryId = route.query['categoryId']?.toLocaleString();
-        const Keyword = route.query['keyword']?.toLocaleString();
-        familyStore.pushToSearch(categoryId, Keyword, value as string)
-    }
+    const categoryId = route.query['categoryId']?.toLocaleString();
+    const Keyword = route.query['keyword']?.toLocaleString();
+    familyStore.pushToSearch(categoryId, Keyword, value as string)
 }
+
 </script>
 
 <style scoped lang="scss"></style>

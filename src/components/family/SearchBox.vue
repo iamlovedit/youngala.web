@@ -17,17 +17,10 @@ function onSearchClick(inputValue: string): void {
         familyStore.searchValue = inputValue;
         familyStore.clearTags();
         const keywordTag: FilterTag = familyStore.createTag(inputValue, FilterType.Keyword);
-        if (route.name == "browser") {
-            familyStore.addTag(keywordTag);
-            familyStore.pushToSearch(undefined, inputValue, familyStore.checkedOrder);
-        }
-        else {
-            const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category);
-            familyStore.addTag(categoryTag);
-            familyStore.addTag(keywordTag);
-            familyStore.pushToSearch(familyStore.selectedCategory?.id, inputValue, familyStore.checkedOrder)
-        }
-
+        const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category);
+        familyStore.addTag(categoryTag);
+        familyStore.addTag(keywordTag);
+        familyStore.pushToSearch(familyStore.selectedCategory?.id, inputValue,  familyStore.checkedOrder)
     }
 }
 

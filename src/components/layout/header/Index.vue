@@ -37,6 +37,7 @@ function onRegisterClick() {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
     .headerLeftContianer {
         height: 100%;
