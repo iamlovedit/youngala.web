@@ -82,11 +82,24 @@ export const useFamilyStore = defineStore('family', () => {
             clearTags();
             clearTreeSelected();
             expandedKeys.value = [];
-            checkedOrder.value = 'name'
-            pageIndex.value = 1
+        }
+        else {
+
         }
     })
-
+    function getFamilyCategories(): void {
+        const promise = getFamilyCategoriesFetch();
+        promise.then(response => {
+            if (response.success) {
+                categories.value = response.response;
+            }
+            else {
+                Message.error(response.message)
+            }
+        }).catch(error => {
+            Message.error(error.message)
+        })
+    }
 
     function getAllFamilyPage(pageIndex: number, sort: string): void {
         const promise = getFamilyPageFetech(pageIndex, pageSize, sort);
@@ -97,7 +110,7 @@ export const useFamilyStore = defineStore('family', () => {
         fetchFamilyPage(promise);
     }
 
-    function getFamilyPageByCategory(categroyId: number, pageIndex: number, sort: string): void {
+    function getFamilyPageByCategory(categroyId: number | string, pageIndex: number, sort: string): void {
         const promise = getFamilyPageByCategoryFetch(categroyId, pageIndex, pageSize, sort);
         fetchFamilyPage(promise);
     }
@@ -149,6 +162,7 @@ export const useFamilyStore = defineStore('family', () => {
         getAllFamilyPage,
         getFamilyPageByKeyword,
         getFamilyPageByCategory,
-        filterFamilyPage
+        filterFamilyPage,
+        getFamilyCategories
     }
 })

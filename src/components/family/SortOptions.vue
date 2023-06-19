@@ -27,6 +27,9 @@ function onOrderChange(value: string | number | boolean) {
     const categoryId = route.query['categoryId']?.toLocaleString();
     const Keyword = route.query['keyword']?.toLocaleString();
     familyStore.pushToSearch(categoryId, Keyword, value as string)
+    if (categoryId && Keyword) {
+        familyStore.filterFamilyPage(categoryId, Keyword, 1, value as string)
+    }
 }
 
 </script>

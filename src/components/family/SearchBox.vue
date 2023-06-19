@@ -4,13 +4,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useRoute } from "vue-router";
 import { useFamilyStore } from '@/stores/modules/families';
 import { FilterType, FilterTag } from '@/models/OrderOption';
 
 const familyStore = useFamilyStore();
-const route = useRoute();
 
 function onSearchClick(inputValue: string): void {
     if (inputValue) {
@@ -18,16 +15,12 @@ function onSearchClick(inputValue: string): void {
         familyStore.clearTags();
         const keywordTag: FilterTag = familyStore.createTag(inputValue, FilterType.Keyword);
         const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category);
+        const categoryId = familyStore.route.query.categoryId?.toLocaleString();
         familyStore.addTag(categoryTag);
         familyStore.addTag(keywordTag);
-        familyStore.pushToSearch(familyStore.selectedCategory?.id, inputValue,  familyStore.checkedOrder)
+        familyStore.pushToSearch(categoryId, inputValue, familyStore.checkedOrder)
     }
 }
-
-onMounted(() => {
-    familyStore.searchValue = route.query['keyword'] as string;
-})
-
 </script>
 
 <style scoped></style>

@@ -6,15 +6,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeMount, watch } from 'vue';
-import { Message, Tree } from "@arco-design/web-vue";
-import { useRoute } from "vue-router";
-import { Family, FamilyCategory } from '@/models/Family';
+import { ref, onMounted, watch } from 'vue';
+import { Tree } from "@arco-design/web-vue";
+import { FamilyCategory } from '@/models/Family';
 import { useFamilyStore } from '@/stores/modules/families';
 import { FilterType, FilterTag } from '@/models/OrderOption'
-import { getFamilyCategoriesFetch } from "@/services/familyService";
-import { debug } from 'console';
-
 class TreeFieldNames {
     constructor(title: string, key: string) {
         this.title = title;
@@ -27,7 +23,6 @@ class TreeFieldNames {
 const familyStore = useFamilyStore();
 const route = familyStore.route;
 const fieldNames: TreeFieldNames = new TreeFieldNames('name', 'id')
-const categories = ref<FamilyCategory[]>([]);
 const tree = ref<InstanceType<typeof Tree> | null>(null)
 
 function OnCategorySelect(_keys: (string | number)[], data: any): void {
@@ -36,7 +31,6 @@ function OnCategorySelect(_keys: (string | number)[], data: any): void {
     const categoryTag: FilterTag = familyStore.createTag(selectedCategory.name, FilterType.Category);
     familyStore.clearTags();
     familyStore.addTag(categoryTag);
-    //in search route
     var keyword = route.query['keyword']
     if (keyword != undefined) {
         const keywordTag = familyStore.createTag(keyword.toString(), FilterType.Keyword);
@@ -45,22 +39,8 @@ function OnCategorySelect(_keys: (string | number)[], data: any): void {
     }
     else {
         familyStore.pushToSearch(selectedCategory.id, undefined, familyStore.checkedOrder);
+        familyStore.getFamilyPageByCategory(selectedCategory.id, 1, familyStore.checkedOrder)
     }
-}
-
-
-function getFamilyCategories(): void {
-    const promise = getFamilyCategoriesFetch();
-    promise.then(response => {
-        if (response.success) {
-            familyStore.categories = response.response;
-        }
-        else {
-            Message.error(response.message)
-        }
-    }).catch(error => {
-        Message.error(error.message)
-    })
 }
 
 function findCategory(categories: FamilyCategory[] | undefined, id: number): FamilyCategory | undefined {
@@ -79,10 +59,6 @@ function findCategory(categories: FamilyCategory[] | undefined, id: number): Fam
     }
     return undefined;
 }
-
-onBeforeMount(() => {
-    getFamilyCategories()
-})
 
 onMounted(() => {
     const categoryId: number | undefined = parseInt(route.query['categoryId']?.toLocaleString() as string);

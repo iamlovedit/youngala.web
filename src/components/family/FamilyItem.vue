@@ -2,7 +2,7 @@
     <div class="familyItemContianer">
         <a-image :src="props.family.imageUrl" height="200" width="220" fit="cover" :preview="false" />
         <div class="nameContianer">
-            <a-link icon @click.prevent="onFamilyClick">
+            <a-link @click.prevent="onFamilyClick">
                 {{ props.family.name }}
             </a-link>
         </div>

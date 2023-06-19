@@ -13,18 +13,26 @@
 </template>
 
 <script setup lang="ts">
-import { FilterTag } from "@models/OrderOption"
+import { FilterTag, FilterType } from "@models/OrderOption"
 import { useFamilyStore } from '@/stores/modules/families';
 
 const familyStore = useFamilyStore();
 function onCloseTag(tag: FilterTag): void {
     familyStore.removeTag(tag);
+    // if (tag.Type === FilterType.Keyword) {
+    //     familyStore.getFamilyPageByCategory(tag.value, 1, 'name');
+    //     familyStore.pushToSearch()
+    // }
+    // else{
+    //     familyStore.getFamilyPageByKeyword(tag.value, 1, 'name');
+    // }
 }
 
 function onClearButtonClick(): void {
     familyStore.clearTags();
     familyStore.clearTreeSelected();
     familyStore.pushToFamilyHome();
+    familyStore.getAllFamilyPage(1, 'name');
 }
 </script>
 
