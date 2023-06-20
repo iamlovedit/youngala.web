@@ -42,11 +42,8 @@ onBeforeMount(() => {
 onMounted(() => {
     familyStore.searchValue = familyStore.route.query['keyword'] as string;
     familyStore.categoryId = familyStore.route.query['categoryId'] as string;
+    familyStore.selectedKeys.push(parseInt(familyStore.categoryId));
 })
-watch(() => familyStore.route, () => {
-
-})
-
 </script>
 
 <style scoped lang="scss">

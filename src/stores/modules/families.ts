@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { Message } from '@arco-design/web-vue';
 import { useRouter, useRoute } from 'vue-router'
 import { Family, FamilyCategory } from '@/models/Family'
@@ -68,7 +68,6 @@ export const useFamilyStore = defineStore('family', () => {
         expandedKeys.value = [];
     }
     function findParentIds(category: FamilyCategory): number[] {
-        console.log(category)
         const parentIds: number[] = [];
         let parent: FamilyCategory = category.parent
         while (parent) {
@@ -86,9 +85,6 @@ export const useFamilyStore = defineStore('family', () => {
             clearTreeSelected();
             expandedKeys.value = [];
         }
-        else {
-
-        }
     })
 
     function getFamilyCategories(): void {
@@ -96,6 +92,11 @@ export const useFamilyStore = defineStore('family', () => {
         promise.then(response => {
             if (response.success) {
                 categories.value = response.response;
+                const node: FamilyCategory | undefined = findCategory(categories.value, categoryId.value as number);
+                if (node) {
+                    selectedCategory.value = node
+                    expandedKeys.value = findParentIds(node)
+                }
             }
             else {
                 Message.error(response.message)
@@ -107,7 +108,7 @@ export const useFamilyStore = defineStore('family', () => {
 
 
     function filterFamilyPage(keyword: string | undefined, categoryId: string | number | undefined, pageIndex: number, sort: string): void {
-        const promise = filterFamiliePageFetch(keyword, categoryId, pageIndex, pageSize, sort);
+        const promise: Promise<HttpResponse<PageData<Family>>> = filterFamiliePageFetch(keyword, categoryId, pageIndex, pageSize, sort);
         promise.then(response => {
             if (response.success) {
                 const familiesPage = response.response;
@@ -122,6 +123,22 @@ export const useFamilyStore = defineStore('family', () => {
         })
     }
 
+    function findCategory(categories: FamilyCategory[] | undefined, id: number): FamilyCategory | undefined {
+        if (categories) {
+            for (const category of categories) {
+                if (category.id == id) {
+                    return category;
+                }
+                if (category.children) {
+                    const found = findCategory(category.children, id);
+                    if (found) {
+                        return found;
+                    }
+                }
+            }
+        }
+        return undefined;
+    }
 
 
     return {
