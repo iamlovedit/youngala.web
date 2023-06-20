@@ -11,7 +11,8 @@ interface Family {
     id: string;
     name: string;
     createTime: string;
-    category: FamilyCategory,
+    category: FamilyCategory;
+    downloads: number;
     stars: number;
     imageUrl: string
 }

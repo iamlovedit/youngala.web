@@ -19,20 +19,23 @@ import { useFamilyStore } from '@/stores/modules/families';
 const familyStore = useFamilyStore();
 function onCloseTag(tag: FilterTag): void {
     familyStore.removeTag(tag);
-    // if (tag.Type === FilterType.Keyword) {
-    //     familyStore.getFamilyPageByCategory(tag.value, 1, 'name');
-    //     familyStore.pushToSearch()
-    // }
-    // else{
-    //     familyStore.getFamilyPageByKeyword(tag.value, 1, 'name');
-    // }
+    if (familyStore.filterTags.length > 0) {
+        if (tag.Type === FilterType.Category) {
+            familyStore.pushToSearch(familyStore.searchValue, undefined);
+        }
+        else {
+            familyStore.pushToSearch(undefined, familyStore.categoryId);
+        }
+    }
+    else {
+        familyStore.pushToSearch(undefined, undefined);
+    }
 }
 
 function onClearButtonClick(): void {
     familyStore.clearTags();
     familyStore.clearTreeSelected();
-    familyStore.pushToFamilyHome();
-    familyStore.getAllFamilyPage(1, 'name');
+    familyStore.pushToSearch(undefined, undefined);
 }
 </script>
 

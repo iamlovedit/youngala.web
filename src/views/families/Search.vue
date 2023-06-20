@@ -35,14 +35,13 @@ import { useFamilyStore } from '@/stores/modules/families';
 
 const familyStore = useFamilyStore();
 
-
 onBeforeMount(() => {
     familyStore.getFamilyCategories();
 })
 
 onMounted(() => {
     familyStore.searchValue = familyStore.route.query['keyword'] as string;
-
+    familyStore.categoryId = familyStore.route.query['categoryId'] as string;
 })
 watch(() => familyStore.route, () => {
 

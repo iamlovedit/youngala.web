@@ -9,7 +9,7 @@ const pageSize = 20;
 const familyStore = useFamilyStore();
 
 function onPageChange(pageIndex: number) {
-    
+    familyStore.pushToSearch(familyStore.searchValue, familyStore.categoryId, pageIndex, familyStore.checkedOrder);
 }
 </script>
 

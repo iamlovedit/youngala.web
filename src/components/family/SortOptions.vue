@@ -5,10 +5,10 @@
                 <a-radio value="name">综合排序</a-radio>
             </a-grid-item>
             <a-grid-item>
-                <a-radio value="download">最多下载</a-radio>
+                <a-radio value="downloads">最多下载</a-radio>
             </a-grid-item>
             <a-grid-item>
-                <a-radio value="latest">最新发布</a-radio>
+                <a-radio value="createTime">最新发布</a-radio>
             </a-grid-item>
             <a-grid-item>
                 <a-radio value="stars">最多收藏</a-radio>
@@ -25,11 +25,8 @@ const familyStore = useFamilyStore();
 
 function onOrderChange(value: string | number | boolean) {
     const categoryId = route.query['categoryId']?.toLocaleString();
-    const Keyword = route.query['keyword']?.toLocaleString();
-    familyStore.pushToSearch(categoryId, Keyword, value as string)
-    if (categoryId && Keyword) {
-        familyStore.filterFamilyPage(categoryId, Keyword, 1, value as string)
-    }
+    const keyword = route.query['keyword']?.toLocaleString();
+    familyStore.pushToSearch(keyword, categoryId, 1, value as string)
 }
 
 </script>

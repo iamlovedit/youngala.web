@@ -12,7 +12,7 @@ import { useFamilyStore } from '@/stores/modules/families';
 const familyStore = useFamilyStore();
 
 onBeforeMount(() => {
-    familyStore.getAllFamilyPage(1, 'name');
+    familyStore.filterFamilyPage(undefined, undefined, 1, 'name');
 })
 </script>
 

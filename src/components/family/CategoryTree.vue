@@ -31,15 +31,14 @@ function OnCategorySelect(_keys: (string | number)[], data: any): void {
     const categoryTag: FilterTag = familyStore.createTag(selectedCategory.name, FilterType.Category);
     familyStore.clearTags();
     familyStore.addTag(categoryTag);
-    var keyword = route.query['keyword']
-    if (keyword != undefined) {
-        const keywordTag = familyStore.createTag(keyword.toString(), FilterType.Keyword);
+    var keyword = route.query['keyword']?.toLocaleString()
+    if (keyword) {
+        const keywordTag = familyStore.createTag(keyword, FilterType.Keyword);
         familyStore.addTag(keywordTag);
-        familyStore.pushToSearch(selectedCategory.id, keyword.toString(), familyStore.checkedOrder)
+        familyStore.pushToSearch(keyword, selectedCategory.id, familyStore.checkedOrder)
     }
     else {
-        familyStore.pushToSearch(selectedCategory.id, undefined, familyStore.checkedOrder);
-        familyStore.getFamilyPageByCategory(selectedCategory.id, 1, familyStore.checkedOrder)
+        familyStore.pushToSearch(undefined, selectedCategory.id, familyStore.checkedOrder);
     }
 }
 
@@ -61,16 +60,16 @@ function findCategory(categories: FamilyCategory[] | undefined, id: number): Fam
 }
 
 onMounted(() => {
-    const categoryId: number | undefined = parseInt(route.query['categoryId']?.toLocaleString() as string);
-    if (categoryId) {
-        familyStore.categoryId = categoryId
-        familyStore.selectedKeys.push(categoryId)
-        //     = familyStore.categories?.find(category => category.id === categoryId);
-        // if (category) {
-        //     const parentIds = familyStore.findParentIds(category);
-        //     familyStore.expandedKeys = parentIds
-        // }
-    }
+    // const categoryId: number | undefined = parseInt(route.query['categoryId']?.toLocaleString() as string);
+    // if (categoryId) {
+    //     familyStore.categoryId = categoryId
+    //     familyStore.selectedKeys.push(categoryId)
+    //     //     = familyStore.categories?.find(category => category.id === categoryId);
+    //     // if (category) {
+    //     //     const parentIds = familyStore.findParentIds(category);
+    //     //     familyStore.expandedKeys = parentIds
+    //     // }
+    // }
 })
 
 watch(() => familyStore.categories, () => {

@@ -4,7 +4,7 @@ import { Message } from '@arco-design/web-vue';
 import { useRouter, useRoute } from 'vue-router'
 import { Family, FamilyCategory } from '@/models/Family'
 import { FilterTag, FilterType } from '@/models/OrderOption'
-import { getFamilyPageByCategoryFetch, getFamilyPageByKeywordFetch, getFamilyPageFetech, filterFamiliePageFetch, getFamilyCategoriesFetch } from "@/services/familyService";
+import { filterFamiliePageFetch, getFamilyCategoriesFetch } from "@/services/familyService";
 import { HttpResponse } from '@/models/HttpResponse';
 import { PageData } from '@/models/PageData';
 
@@ -26,21 +26,24 @@ export const useFamilyStore = defineStore('family', () => {
     const dataCount = ref<number>(0);
     const families = ref<Family[]>();
     const pageSize = 20;
-    function pushToSearch(categoryId?: number | string, keyword?: string, sort: string = 'name'): void {
+
+
+    /**
+ * Updates search parameters and navigates to family search page.
+ * @param keyword - Optional search keyword.
+ * @param categoryId - Optional category ID to filter search.
+ * @param sort - Optional sort parameter. Defaults to 'name'.
+ */
+    function pushToSearch(keyword?: string, categoryId?: number | string, pageIndex: number = 1, sort: string = 'name'): void {
+        filterFamilyPage(keyword, categoryId, 1, sort)
         router.push({
             name: 'familySearch',
             query: {
                 categoryId: categoryId,
                 keyword: keyword,
-                pageIndex: 1,
+                pageIndex: pageIndex,
                 sort: sort
             }
-        })
-    }
-
-    function pushToFamilyHome(): void {
-        router.push({
-            path: '/family',
         })
     }
 
@@ -87,6 +90,7 @@ export const useFamilyStore = defineStore('family', () => {
 
         }
     })
+
     function getFamilyCategories(): void {
         const promise = getFamilyCategoriesFetch();
         promise.then(response => {
@@ -97,30 +101,13 @@ export const useFamilyStore = defineStore('family', () => {
                 Message.error(response.message)
             }
         }).catch(error => {
-            Message.error(error.message)
+            Message.error(`网络请求错误: ${error.message}`)
         })
     }
 
-    function getAllFamilyPage(pageIndex: number, sort: string): void {
-        const promise = getFamilyPageFetech(pageIndex, pageSize, sort);
-        fetchFamilyPage(promise);
-    }
-    function getFamilyPageByKeyword(keyword: string, pageIndex: number, sort: string): void {
-        const promise = getFamilyPageByKeywordFetch(keyword, pageIndex, pageSize, sort);
-        fetchFamilyPage(promise);
-    }
 
-    function getFamilyPageByCategory(categroyId: number | string, pageIndex: number, sort: string): void {
-        const promise = getFamilyPageByCategoryFetch(categroyId, pageIndex, pageSize, sort);
-        fetchFamilyPage(promise);
-    }
-
-    function filterFamilyPage(categoryId: string | number, keyword: string, pageIndex: number, sort: string) {
-        const promise = filterFamiliePageFetch(categoryId, keyword, pageIndex, pageSize, sort);
-        fetchFamilyPage(promise);
-    }
-
-    function fetchFamilyPage(promise: Promise<HttpResponse<PageData<Family>>>): void {
+    function filterFamilyPage(keyword: string | undefined, categoryId: string | number | undefined, pageIndex: number, sort: string): void {
+        const promise = filterFamiliePageFetch(keyword, categoryId, pageIndex, pageSize, sort);
         promise.then(response => {
             if (response.success) {
                 const familiesPage = response.response;
@@ -131,9 +118,10 @@ export const useFamilyStore = defineStore('family', () => {
                 Message.error(response.message)
             }
         }).catch(error => {
-            Message.error("网络请求错误:", error.message)
+            Message.error(`网络请求错误: ${error.message}`)
         })
     }
+
 
 
     return {
@@ -153,15 +141,11 @@ export const useFamilyStore = defineStore('family', () => {
         categoryId,
         clearTags,
         pushToSearch,
-        pushToFamilyHome,
         addTag,
         removeTag,
         createTag,
         clearTreeSelected,
         findParentIds,
-        getAllFamilyPage,
-        getFamilyPageByKeyword,
-        getFamilyPageByCategory,
         filterFamilyPage,
         getFamilyCategories
     }

@@ -9,38 +9,11 @@ function getFamilyCategoriesFetch(): Promise<HttpResponse<FamilyCategory[]>> {
     const promise = httpRequest.getAsync<HttpResponse<FamilyCategory[]>>('/v1/categories');
     return promise;
 }
-function getFamilyPageByCategoryFetch(categoryId: number | string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
-    const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>("/v1/category", {
-        categoryId,
-        pageIndex,
-        pageSize,
-        orderField: sort
-    })
-    return promise;
-}
-function getFamilyPageByKeywordFetch(keyword: string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
-    const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>('/v1/keyword', {
-        keyword,
-        pageIndex,
-        pageSize,
-        orderField: sort
-    })
-    return promise;
-}
 
-function getFamilyPageFetech(pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
-    const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>('/v1/all', {
-        pageIndex,
-        pageSize,
-        orderField: sort
-    })
-    return promise;
-}
-
-function filterFamiliePageFetch(categoryId: number | string, keyword: string, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
+function filterFamiliePageFetch(keyword: string | undefined, categoryId: number | string | undefined, pageIndex: number, pageSize: number, sort: string): Promise<HttpResponse<PageData<Family>>> {
     const promise = httpRequest.getAsync<HttpResponse<PageData<Family>>>('/v1', {
-        categoryId,
-        keyword,
+        keyword: keyword,
+        categoryId: categoryId,
         pageIndex,
         pageSize,
         orderField: sort
@@ -68,9 +41,6 @@ function getFamilyVersionFetch(id: number): Promise<HttpResponse<number[]>> {
 
 export {
     getFamilyCategoriesFetch,
-    getFamilyPageFetech,
-    getFamilyPageByCategoryFetch,
-    getFamilyPageByKeywordFetch,
     getFamilyFileByVersionFetch,
     getFamilyDetailFetch,
     getFamilyVersionFetch,

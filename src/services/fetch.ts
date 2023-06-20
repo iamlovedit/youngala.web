@@ -23,9 +23,16 @@ export class HttpRequest {
     async getAsync<T>(route: string = '', data: any = {}): Promise<T> {
         let url = this.baseUrl + route;
         let dataStr: string = '';
-        Object.keys(data).forEach(key => {
-            dataStr += key + '=' + data[key] + '&'
-        })
+        const keys: string[] = Object.keys(data);
+        for (let index = 0; index < keys.length; index++) {
+            const key = keys[index];
+            if (data[key]) {
+                dataStr += key + '=' + data[key] + '&';
+            }
+            else {
+                dataStr += key + '=&';
+            }
+        }
         if (dataStr !== '') {
             dataStr = dataStr.substring(0, dataStr.lastIndexOf('&'));
             url = url + '?' + dataStr

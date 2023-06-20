@@ -14,11 +14,13 @@ function onSearchClick(inputValue: string): void {
         familyStore.searchValue = inputValue;
         familyStore.clearTags();
         const keywordTag: FilterTag = familyStore.createTag(inputValue, FilterType.Keyword);
-        const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category);
         const categoryId = familyStore.route.query.categoryId?.toLocaleString();
-        familyStore.addTag(categoryTag);
+        if (categoryId) {
+            const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category);
+            familyStore.addTag(categoryTag);
+        }
         familyStore.addTag(keywordTag);
-        familyStore.pushToSearch(categoryId, inputValue, familyStore.checkedOrder)
+        familyStore.pushToSearch(inputValue, categoryId)
     }
 }
 </script>
