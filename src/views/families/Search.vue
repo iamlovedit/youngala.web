@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, watch } from 'vue'
+import { onMounted } from 'vue'
 import CategoryTree from '@components/family/CategoryTree.vue';
 import SearchBox from '@/components/family/SearchBox.vue';
 import FilterTags from '@/components/family/FilterTags.vue';
@@ -32,34 +32,45 @@ import SortOptions from '@/components/family/SortOptions.vue';
 import FamiliesList from '@/components/family/FamiliesList.vue';
 import FamilyPagination from '@/components/family/FamilyPagination.vue';
 import { useFamilyStore } from '@/stores/modules/families';
+import { FilterType } from '@/models/OrderOption';
 
 const familyStore = useFamilyStore();
 
-onBeforeMount(() => {
+const fetchData = async () => {
     familyStore.getFamilyCategories();
-})
+}
 
-onMounted(() => {
+const initView = async () => {
+    await fetchData();
     familyStore.searchValue = familyStore.route.query['keyword'] as string;
     familyStore.categoryId = familyStore.route.query['categoryId'] as string;
-    familyStore.selectedKeys.push(parseInt(familyStore.categoryId));
+    const categoryId = parseInt(familyStore.categoryId);
+    familyStore.selectedKeys.push(categoryId);
+    if (familyStore.searchValue) {
+        const tag = familyStore.createTag(familyStore.searchValue, FilterType.Keyword, 1);
+        familyStore.addTag(tag)
+    }
+    familyStore.filterFamilyPage(familyStore.searchValue, familyStore.categoryId, 1, "name")
+}
+
+onMounted(() => {
+    initView();
 })
 </script>
 
 <style scoped lang="scss">
 .browserContainer {
     width: 60%;
-    margin: $Global-MainContent-Margin;
-    height: calc(100% - 2em);
+    margin: 0 auto;
+    height: 100%;
     display: flex;
     flex-wrap: nowrap;
+    padding: $Global-MainContent-Padding;
     gap: 1em;
 
     .categoriesContainer {
         width: 280px;
-        border: 1px solid lightgrey;
-        padding: 1em;
-        height: 100%;
+        height: calc(100% - 2em);
     }
 
     .mainContainer {

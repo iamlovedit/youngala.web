@@ -108,6 +108,7 @@ onBeforeMount(() => {
     width: 60%;
     height: 100%;
     margin: $Global-MainContent-Margin;
+    padding: $Global-MainContent-Padding;
 }
 
 .orderOptionContainer {

@@ -2,14 +2,14 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { Message } from '@arco-design/web-vue';
 import { useRouter, useRoute } from 'vue-router'
-import { Family, FamilyCategory } from '@/models/Family'
+import { FamilyCategory } from '@/models/Family'
 import { FilterTag, FilterType } from '@/models/OrderOption'
 import { filterFamiliePageFetch, getFamilyCategoriesFetch } from "@/services/familyService";
 import { HttpResponse } from '@/models/HttpResponse';
 import { PageData } from '@/models/PageData';
 
 export const useFamilyStore = defineStore('family', () => {
-    const family = ref<Family>()
+
     const categoryId = ref<number | string | undefined>();
     const searchValue = ref<string | undefined>();
     const selectedCategory = ref<FamilyCategory>()
@@ -58,9 +58,9 @@ export const useFamilyStore = defineStore('family', () => {
     function removeTag(tag: FilterTag): void {
         filterTags.value = filterTags.value.filter(item => item !== tag)
     }
-    function createTag(title: string, filterType: FilterType): FilterTag {
+    function createTag(title: string, filterType: FilterType, order: number): FilterTag {
         const color = filterType == FilterType.Keyword ? keywordColor : categoryColor;
-        return new FilterTag(title, filterType, color);
+        return new FilterTag(title, filterType, order, color);
     }
 
     function clearTreeSelected(): void {
@@ -77,6 +77,10 @@ export const useFamilyStore = defineStore('family', () => {
         return parentIds;
     }
 
+    function setDefaultSort() {
+        checkedOrder.value = 'name'
+    }
+
     watch(route, () => {
         categoryId.value = route.query.categoryId?.toLocaleString();
         searchValue.value = route.query.keyword?.toLocaleString()
@@ -84,6 +88,7 @@ export const useFamilyStore = defineStore('family', () => {
             clearTags();
             clearTreeSelected();
             expandedKeys.value = [];
+            filterFamilyPage(undefined, undefined, 1, "name")
         }
     })
 
@@ -95,7 +100,12 @@ export const useFamilyStore = defineStore('family', () => {
                 const node: FamilyCategory | undefined = findCategory(categories.value, categoryId.value as number);
                 if (node) {
                     selectedCategory.value = node
-                    expandedKeys.value = findParentIds(node)
+                    const tag = createTag(node.name, FilterType.Category, 0);
+                    addTag(tag);
+                    filterTags.value = filterTags.value.sort((a, b) => {
+                        return a.order - b.order
+                    })
+
                 }
             }
             else {
@@ -144,7 +154,6 @@ export const useFamilyStore = defineStore('family', () => {
     return {
         router,
         route,
-        family,
         selectedCategory,
         categories,
         filterTags,
@@ -164,6 +173,8 @@ export const useFamilyStore = defineStore('family', () => {
         clearTreeSelected,
         findParentIds,
         filterFamilyPage,
-        getFamilyCategories
+        getFamilyCategories,
+        setDefaultSort,
+        findCategory
     }
 })

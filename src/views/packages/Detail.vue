@@ -72,19 +72,21 @@ onMounted(() => {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .detailContainer {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: start;
-    margin-top: 1em;
-    width: 100%;
+    width: 60%;
+    height: 100%;
+    margin: $Global-MainContent-Margin;
+    padding: $Global-MainContent-Padding;
 }
 
 .versionContainer {
     height: fit-content;
-    width: 60%;
+    width: 100%;
 }
 
 .paginationContainer {

@@ -1,6 +1,6 @@
 interface OrderOption {
     value: string,
-    label: string
+    label: string,
 }
 
 enum FilterType {
@@ -9,14 +9,16 @@ enum FilterType {
 }
 
 class FilterTag {
-    constructor(value: string, Type: FilterType, color: string | undefined) {
+    constructor(value: string, Type: FilterType, order: number, color: string | undefined) {
         this.value = value
         this.Type = Type
         this.color = color
+        this.order = order
     }
     value: string
     Type: FilterType
     color: string | undefined
+    order: number
 }
 
 export type {

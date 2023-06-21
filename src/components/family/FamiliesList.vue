@@ -6,14 +6,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount } from 'vue'
 import FamilyItem from "@components/family/FamilyItem.vue";
 import { useFamilyStore } from '@/stores/modules/families';
 const familyStore = useFamilyStore();
-
-onBeforeMount(() => {
-    familyStore.filterFamilyPage(undefined, undefined, 1, 'name');
-})
 </script>
 
 <style scoped>

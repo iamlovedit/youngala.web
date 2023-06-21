@@ -13,10 +13,11 @@ function onSearchClick(inputValue: string): void {
     if (inputValue) {
         familyStore.searchValue = inputValue;
         familyStore.clearTags();
-        const keywordTag: FilterTag = familyStore.createTag(inputValue, FilterType.Keyword);
+        familyStore.setDefaultSort();
+        const keywordTag: FilterTag = familyStore.createTag(inputValue, FilterType.Keyword, 1);
         const categoryId = familyStore.route.query.categoryId?.toLocaleString();
         if (categoryId) {
-            const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category);
+            const categoryTag = familyStore.createTag(familyStore.selectedCategory?.name as string, FilterType.Category, 1);
             familyStore.addTag(categoryTag);
         }
         familyStore.addTag(keywordTag);

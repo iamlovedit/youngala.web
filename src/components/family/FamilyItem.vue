@@ -2,7 +2,7 @@
     <div class="familyItemContianer">
         <a-image :src="props.family.imageUrl" height="200" width="220" fit="cover" :preview="false" />
         <div class="nameContianer">
-            <a-link @click.prevent="onFamilyClick">
+            <a-link :href="`/family/${props.family.id}`">
                 {{ props.family.name }}
             </a-link>
         </div>
@@ -14,21 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import { Family } from '@/models/Family';
 interface props {
     family: Family
 }
-
 const props = defineProps<props>()
-const router = useRouter();
-
-
-function onFamilyClick() {
-    const url = router.resolve({ name: 'familyDetail', params: { id: props.family.id } }).href;
-    window.open(url, '_blank');
-}
-
 </script>
 
 <style scoped>

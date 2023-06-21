@@ -54,11 +54,6 @@ export const constantRoute = [
         },
         children: [
             {
-                path: 'browser',
-                name: 'browser',
-                component: () => import('@/views/families/Browser.vue'),
-            },
-            {
                 path: ':id(\\d+)',
                 name: 'familyDetail',
                 component: () => import('@/views/families/Detail.vue')
