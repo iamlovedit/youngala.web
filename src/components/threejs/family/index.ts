@@ -1,15 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-class MySence {
-    constructor(canvasWidth: number, canvasHeight: number) {
-        this.canvasWidth = canvasWidth;
-        this.canvasHeight = canvasHeight;
-    }
-    canvasWidth: number;
-    canvasHeight: number;
-}
-
 const scene: THREE.Scene = new THREE.Scene();
 const geometry: THREE.BoxGeometry = new THREE.BoxGeometry(100, 100, 100); //创建一个立方体几何对象Geometry
 const material: THREE.MeshBasicMaterial = new THREE.MeshLambertMaterial({
@@ -54,7 +45,8 @@ function render(): void {
 render();
 
 //创建控件对象  相机对象camera作为参数   控件可以监听鼠标的变化，改变相机对象的属性
-new OrbitControls(camera, renderer.domElement);
-
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 0);
+controls.update();
 
 export { renderer };
