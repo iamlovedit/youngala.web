@@ -17,7 +17,7 @@ import { useRouter } from "vue-router";
 import Content from "@components/layout/content/Index.vue";
 
 interface Props {
-    status: string | number,
+    status: any,
     subtitle: string
 }
 
