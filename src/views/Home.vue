@@ -297,7 +297,7 @@ onMounted(() => {
                 for (const car of loadedCars!.children.slice()) {
                     const fix = fixes.find(fix => car.name.startsWith(fix.prefix));
                     const obj: THREE.Object3D = new THREE.Object3D();
-                    car.position.set(0, fix.y, 0);
+                    car.position.set(0, fix!.y, 0);
                     car.rotation.set(...fix.rot);
                     obj.add(car);
                     scene.add(obj);
