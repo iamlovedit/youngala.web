@@ -5,7 +5,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
-
+div{
+  box-sizing: border-box;
+}
 @media (prefers-color-scheme: light) {
  
 }
